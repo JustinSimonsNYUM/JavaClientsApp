@@ -9,7 +9,7 @@
         <module name="JavaClientsApp" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="17">
       <module name="JavaClientsApp" target="17" />
     </bytecodeTargetLevel>
   </component>
