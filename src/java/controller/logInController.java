@@ -54,7 +54,7 @@ public class logInController {
     void logInButton(ActionEvent event) throws IOException{
         String userId = userIdLogIn.getText();
         String password = passwordLogIn.getText();
-        System.out.println("hello");
+        System.out.println("hellos");
         ResourceBundle rb = ResourceBundle.getBundle("RB", Locale.getDefault());
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle((String) rb.getObject("errorTitle"));
