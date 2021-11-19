@@ -4,15 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.sql.Connection;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import java.util.ResourceBundle;
+
 
 public class Main extends Application {
     @Override
@@ -22,10 +15,8 @@ public class Main extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.setResizable(false);
+        stage.setTitle("Java Client App");
         stage.show();
-
-        ResourceBundle rb = ResourceBundle.getBundle("RB", Locale.getDefault());
-        stage.setTitle(rb.getString("stageTitle"));
     }
 
     public static void main(String[] args) {
