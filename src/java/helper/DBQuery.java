@@ -14,6 +14,9 @@ public class DBQuery {
     public static void setStatement(Connection connect) throws SQLException {
         statement = connect.createStatement();
     }
+    public static Statement getStatement(){
+        return statement;
+    }
 
     public static void setPreparedStatement(Connection connect, String sqlQuery) throws SQLException{
         statement = connect.prepareStatement(sqlQuery);
@@ -23,7 +26,5 @@ public class DBQuery {
         return preparedStatement;
     }
 
-    public static Statement getStatement(){
-        return statement;
-    }
+
 }

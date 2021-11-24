@@ -63,7 +63,7 @@ public class logInController {
         if((userId.equals("test")) && (password.equals("test"))){
             stage = (Stage)((Button)event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/mainPage.fxml")));
-            stage.setScene(new Scene(scene,400,400));
+            stage.setScene(new Scene(scene,1235,558));
             stage.show();
         }
         else if(userId.isEmpty() || password.isEmpty()){
