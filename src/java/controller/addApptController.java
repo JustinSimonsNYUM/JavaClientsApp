@@ -31,7 +31,7 @@ public class addApptController {
     private TextField addNewApptID;
 
     @FXML
-    private ComboBox<?> addNewApptLocation;
+    private TextField addNewApptLocation;
 
     @FXML
     private ComboBox<?> addNewApptStartTime;

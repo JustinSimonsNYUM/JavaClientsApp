@@ -1,13 +1,8 @@
 package model;
 
-/////currently trying to figure out conversion from localdate and localtime to local date time so i can get it in the table.
 
 
-import java.sql.Timestamp;
-import java.time.DateTimeException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class appointments {
 
@@ -155,4 +150,6 @@ public class appointments {
     public void setContactID(int contactID) {
         this.contactID = contactID;
     }
+
+
 }

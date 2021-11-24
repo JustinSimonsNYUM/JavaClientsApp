@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -19,80 +20,79 @@ import model.tables;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class mainPageController {
+public class mainPageController implements Initializable {
     @FXML
-    private ToggleGroup apptMonthOrWeek;
-//    public appointments String title, String description, String location, String type, LocalDateTime start,
-//    LocalDateTime end, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy,
-//    int customerID, int userID, int contactID) {
+    private ToggleGroup apptRadio;
+
     @FXML
     private TableColumn<appointments, Integer> ATableContactID;
 
     @FXML
-    private TableColumn<appointments, ?> ATableCreateDate;
+    private TableColumn<appointments, LocalDateTime> ATableCreateDate;
 
     @FXML
-    private TableColumn<appointments, ?> ATableCreatedBy;
+    private TableColumn<appointments, String> ATableCreatedBy;
 
     @FXML
-    private TableColumn<appointments, ?> ATableCustomerID;
+    private TableColumn<appointments, Integer> ATableCustomerID;
 
     @FXML
-    private TableColumn<appointments, ?> ATableDescription;
+    private TableColumn<appointments, String> ATableDescription;
 
     @FXML
-    private TableColumn<appointments, ?> ATableEnd;
+    private TableColumn<appointments, LocalDateTime> ATableEnd;
 
     @FXML
-    private TableColumn<appointments, ?> ATableID;
+    private TableColumn<appointments, Integer> ATableID;
 
     @FXML
-    private TableColumn<appointments, ?> ATableLastUpdate;
+    private TableColumn<appointments, LocalDateTime> ATableLastUpdate;
 
     @FXML
-    private TableColumn<appointments, ?> ATableLastUpdatedBy;
+    private TableColumn<appointments, String> ATableLastUpdatedBy;
 
     @FXML
-    private TableColumn<appointments, ?> ATableLocation;
+    private TableColumn<appointments, String> ATableLocation;
 
     @FXML
-    private TableColumn<appointments, ?> ATableStart;
+    private TableColumn<appointments, LocalDateTime> ATableStart;
 
     @FXML
-    private TableColumn<appointments, ?> ATableTitle;
+    private TableColumn<appointments, String> ATableTitle;
 
     @FXML
-    private TableColumn<appointments, ?> ATableType;
+    private TableColumn<appointments, String> ATableType;
 
     @FXML
-    private TableColumn<appointments, ?> ATableUserID;
+    private TableColumn<appointments, Integer> ATableUserID;
 
     @FXML
-    private TableColumn<customers, ?> CTableAddress;
+    private TableColumn<customers, String> CTableAddress;
 
     @FXML
-    private TableColumn<customers, ?> CTableCreateDate;
+    private TableColumn<customers, LocalDateTime> CTableCreateDate;
 
     @FXML
-    private TableColumn<customers, ?> CTableCreatedBy;
+    private TableColumn<customers, String> CTableCreatedBy;
 
     @FXML
-    private TableColumn<customers, ?> CTableID;
+    private TableColumn<customers, Integer> CTableID;
 
     @FXML
-    private TableColumn<customers, ?> CTableLastUpdate;
+    private TableColumn<customers, LocalDateTime> CTableLastUpdate;
 
     @FXML
-    private TableColumn<customers, ?> CTableLastUpdatedBy;
+    private TableColumn<customers, String> CTableLastUpdatedBy;
 
     @FXML
-    private TableColumn<customers, ?> CTableName;
+    private TableColumn<customers, String> CTableName;
 
     @FXML
-    private TableColumn<customers, ?> CTablePostal;
+    private TableColumn<customers, String> CTablePostal;
 
     @FXML
     private Button addApptButton;
@@ -140,14 +140,18 @@ public class mainPageController {
     }
 
     private void CreateCustomerTable() {
-        customerTable.setItems(customerList);
-        customerList.setAll(tables.getAllCustomers());
-        customerTable.refresh();
+        //customerTable.setItems(customerList);
+       // customerList.setAll(tables.getAllCustomers());
+        //customerTable.refresh();
     }
 
     Stage stage;
     Parent scene;
 
+    @FXML
+    void apptAllRadio(ActionEvent event) {
+
+    }
     @FXML
     void apptMonthRadio(ActionEvent event) {
 

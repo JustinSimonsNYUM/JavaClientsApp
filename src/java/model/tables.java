@@ -8,9 +8,7 @@ public class tables {
     private static ObservableList<appointments> allAppointments = FXCollections.observableArrayList();
     private static ObservableList<customers> allCustomers = FXCollections.observableArrayList();
 
-    public static void addAppointment(appointments newAppointment){
-        allAppointments.add(newAppointment);
-    }
+    public static void addAppointment(appointments newAppointment){allAppointments.add(newAppointment); }
 
     public static void addCustomer(customers newCustomer){
         allCustomers.add(newCustomer);

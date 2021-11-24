@@ -3,6 +3,7 @@ package model;
 import java.sql.Timestamp;
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -12,21 +13,19 @@ public class customers{
     private String address;
     private String postalCode;
     private String phone;
-    private LocalDate createDateDate;
-    private LocalTime createDateTime;
+    private LocalDateTime createDate;
     private String createdBy;
-    private Timestamp lastUpdate;
+    private LocalDateTime lastUpdate;
     private String lastUpdatedBy;
     private int divisionID;
 
-    public customers(int id, String name, String address, String postalCode, String phone, LocalDate createDateDate, LocalTime createDateTime, String createdBy, Timestamp lastUpdate, String lastUpdatedBy, int divisionID) {
+    public customers(int id, String name, String address, String postalCode, String phone, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int divisionID) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.postalCode = postalCode;
         this.phone = phone;
-        this.createDateDate = createDateDate;
-        this.createDateTime = createDateTime;
+        this.createDate = createDate;
         this.createdBy = createdBy;
         this.lastUpdate = lastUpdate;
         this.lastUpdatedBy = lastUpdatedBy;
@@ -73,20 +72,20 @@ public class customers{
         this.phone = phone;
     }
 
-    public LocalDate getCreateDateDate() {
-        return createDateDate;
+    public LocalDateTime getCreateDate() {
+        return createDate;
     }
 
-    public void setCreateDateDate(LocalDate createDateDate) {
-        this.createDateDate = createDateDate;
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
     }
 
-    public LocalTime getCreateDateTime() {
-        return createDateTime;
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
     }
 
-    public void setCreateDateTime(LocalTime createDateTime) {
-        this.createDateTime = createDateTime;
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     public String getCreatedBy() {
@@ -97,13 +96,6 @@ public class customers{
         this.createdBy = createdBy;
     }
 
-    public Timestamp getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Timestamp lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
 
     public String getLastUpdatedBy() {
         return lastUpdatedBy;

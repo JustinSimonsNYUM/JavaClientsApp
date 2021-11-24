@@ -17,8 +17,9 @@ import java.time.LocalTime;
 
 
 public class Main extends Application {
+
     @Override
-    public void start(Stage stage) throws IOException, SQLException {
+    public void start(Stage stage) throws SQLException {
         fillTables();
        try{
            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("logIn.fxml"));
@@ -52,7 +53,7 @@ public class Main extends Application {
             statement.execute(query);
             ResultSet rs = statement.getResultSet();
             while(rs.next()){
-                int apptID = rs.getInt("ID");
+                int apptID = rs.getInt("Appointment_ID");
                 String title = rs.getString("Title");
                 String description = rs.getString("Description");
                 String location = rs.getString("Location");
@@ -72,8 +73,11 @@ public class Main extends Application {
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
+                appointments apptDemo = new appointments(1,"hello","hello","location","type",null,null,null,"createdBy",null,"lastUpdatedBy",1,2,3);
+
                 appointments appt = new appointments(apptID,title,description,location,type,start,end,createDate,createdBy,lastUpdate,lastUpdatedBy,customerID,userID,contactID);
-                tables.addAppointment(appt);
+                //System.out.println(apptID + title + description + location+type+start+end+createDate+createdBy+lastUpdate+lastUpdatedBy+customerID+userID+contactID);
+                tables.addAppointment(apptDemo);
             }
         } catch (Exception e){
             System.out.println(e.getMessage());

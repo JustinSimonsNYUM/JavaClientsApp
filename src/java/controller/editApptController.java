@@ -37,7 +37,7 @@ public class editApptController {
     private TextField editApptID;
 
     @FXML
-    private ComboBox<?> editApptLocation;
+    private TextField editApptLocation;
 
     @FXML
     private ComboBox<?> editApptStartTime;
