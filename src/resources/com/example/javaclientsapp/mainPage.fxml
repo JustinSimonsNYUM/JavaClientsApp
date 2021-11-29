@@ -21,10 +21,10 @@
    <Button fx:id="deleteCustomerButton" layoutX="1061.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteCustomerButtonAction" text="Delete Customer" />
    <TableView fx:id="customerTable" layoutX="7.0" layoutY="37.0" prefHeight="200.0" prefWidth="798.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="40.0">
       <columns>
-         <TableColumn fx:id="CTableID" prefWidth="50.5" text="ID" />
-         <TableColumn fx:id="CTableName" prefWidth="153.0" text="Customer Name" />
-         <TableColumn fx:id="CTableAddress" prefWidth="223.0" text="Address" />
-         <TableColumn fx:id="CTablePostal" prefWidth="136.0" text="Postal Code" />
+         <TableColumn fx:id="CTableID" prefWidth="31.5" text="ID" />
+         <TableColumn fx:id="CTableName" prefWidth="190.5" text="Customer Name" />
+         <TableColumn fx:id="CTableAddress" prefWidth="222.5" text="Address" />
+         <TableColumn fx:id="CTablePostal" prefWidth="118.0" text="Postal Code" />
          <TableColumn fx:id="CTableCreateDate" prefWidth="164.5" text="Create Date" />
          <TableColumn fx:id="CTableCreatedBy" prefWidth="136.0" text="Created By" />
          <TableColumn fx:id="CTableLastUpdate" prefWidth="169.5" text="Last Update" />
@@ -35,37 +35,37 @@
    </TableView>
    <TableView fx:id="apptTable" editable="true" layoutX="9.0" layoutY="265.0" prefHeight="200.0" prefWidth="798.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="290.0">
       <columns>
-         <TableColumn fx:id="ATableID" prefWidth="34.0" text="ID">
+         <TableColumn fx:id="ATableID" prefWidth="18.5" text="ID">
             <cellValueFactory>
                <PropertyValueFactory property="id" />
             </cellValueFactory>
          </TableColumn>
-         <TableColumn fx:id="ATableTitle" prefWidth="66.0" text="Title">
+         <TableColumn fx:id="ATableTitle" prefWidth="81.5" text="Title">
             <cellValueFactory>
                <PropertyValueFactory property="title" />
             </cellValueFactory>
          </TableColumn>
-         <TableColumn fx:id="ATableDescription" prefWidth="115.0" text="Description">
+         <TableColumn fx:id="ATableDescription" prefWidth="122.0" text="Description">
             <cellValueFactory>
                <PropertyValueFactory property="description" />
             </cellValueFactory>
          </TableColumn>
-         <TableColumn fx:id="ATableLocation" prefWidth="106.0" text="Location">
+         <TableColumn fx:id="ATableLocation" prefWidth="127.0" text="Location">
             <cellValueFactory>
                <PropertyValueFactory property="location" />
             </cellValueFactory>
          </TableColumn>
-         <TableColumn fx:id="ATableType" prefWidth="72.5" text="Type">
+         <TableColumn fx:id="ATableType" prefWidth="114.0" text="Type">
             <cellValueFactory>
                <PropertyValueFactory property="type" />
             </cellValueFactory>
          </TableColumn>
-         <TableColumn fx:id="ATableStart" prefWidth="121.5" text="Start">
+         <TableColumn fx:id="ATableStart" prefWidth="122.5" text="Start">
             <cellValueFactory>
                <PropertyValueFactory property="start" />
             </cellValueFactory>
          </TableColumn>
-         <TableColumn fx:id="ATableEnd" prefWidth="126.0" text="End">
+         <TableColumn fx:id="ATableEnd" prefWidth="118.0" text="End">
             <cellValueFactory>
                <PropertyValueFactory property="end" />
             </cellValueFactory>
@@ -75,32 +75,32 @@
                <PropertyValueFactory property="createDate" />
             </cellValueFactory>
          </TableColumn>
-         <TableColumn fx:id="ATableCreatedBy" minWidth="56.5" prefWidth="65.5" text="Created By">
+         <TableColumn fx:id="ATableCreatedBy" minWidth="56.5" prefWidth="74.0" text="Created By">
             <cellValueFactory>
                <PropertyValueFactory property="createdBy" />
             </cellValueFactory>
          </TableColumn>
-         <TableColumn fx:id="ATableLastUpdate" minWidth="23.5" prefWidth="116.5" text="Last Update">
+         <TableColumn fx:id="ATableLastUpdate" minWidth="107.0" prefWidth="119.0" text="Last Update">
             <cellValueFactory>
                <PropertyValueFactory property="lastUpdate" />
             </cellValueFactory>
          </TableColumn>
-         <TableColumn fx:id="ATableLastUpdatedBy" minWidth="32.5" prefWidth="97.0" text="Last Updated By">
+         <TableColumn fx:id="ATableLastUpdatedBy" minWidth="32.5" prefWidth="72.0" text="      Last &#10;Updated By">
             <cellValueFactory>
                <PropertyValueFactory property="lastUpdatedBy" />
             </cellValueFactory>
          </TableColumn>
-         <TableColumn fx:id="ATableCustomerID" minWidth="59.5" prefWidth="74.5" text="Customer ID">
+         <TableColumn fx:id="ATableCustomerID" minWidth="56.5" prefWidth="58.5" text="Customer&#10;      ID">
             <cellValueFactory>
                <PropertyValueFactory property="customerID" />
             </cellValueFactory>
          </TableColumn>
-         <TableColumn fx:id="ATableUserID" minWidth="0.0" prefWidth="45.5" text="User ID">
+         <TableColumn fx:id="ATableUserID" minWidth="0.0" prefWidth="30.5" text="User&#10;  ID">
             <cellValueFactory>
                <PropertyValueFactory property="userID" />
             </cellValueFactory>
          </TableColumn>
-         <TableColumn fx:id="ATableContactID" minWidth="26.0" prefWidth="66.0" text="Contact ID">
+         <TableColumn fx:id="ATableContactID" minWidth="26.0" prefWidth="48.5" text="Contact&#10;     ID">
             <cellValueFactory>
                <PropertyValueFactory property="contactID" />
             </cellValueFactory>
@@ -149,4 +149,9 @@
          <Font size="13.0" />
       </font>
    </RadioButton>
+   <Button layoutX="1061.0" layoutY="502.0" mnemonicParsing="false" onAction="#closeAppButton" text="Close Application">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </Button>
 </AnchorPane>

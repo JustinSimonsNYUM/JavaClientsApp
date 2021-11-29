@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 
-public class customers{
+public class Customers {
     private int id;
     private String name;
     private String address;
@@ -19,7 +19,7 @@ public class customers{
     private String lastUpdatedBy;
     private int divisionID;
 
-    public customers(int id, String name, String address, String postalCode, String phone, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int divisionID) {
+    public Customers(int id, String name, String address, String postalCode, String phone, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int divisionID) {
         this.id = id;
         this.name = name;
         this.address = address;

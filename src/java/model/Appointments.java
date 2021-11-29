@@ -2,9 +2,12 @@ package model;
 
 
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.time.LocalDateTime;
 
-public class appointments {
+public class Appointments {
 
     private int id;
     private String title;
@@ -21,8 +24,7 @@ public class appointments {
     private int userID;
     private int contactID;
 
-
-    public appointments(int id, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID) {
+    public Appointments(int id, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -70,6 +72,8 @@ public class appointments {
     public void setId(int id) {
         this.id = id;
     }
+
+    //public Integer idProperty(){return id;}
 
     public String getTitle() {
         return title;

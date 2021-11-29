@@ -14,9 +14,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import model.appointments;
-import model.customers;
-import model.tables;
+import model.Appointments;
+import model.Customers;
+import model.Tables;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,70 +29,70 @@ public class mainPageController implements Initializable {
     private ToggleGroup apptRadio;
 
     @FXML
-    private TableColumn<appointments, Integer> ATableContactID;
+    private TableColumn<Appointments, Integer> ATableContactID;
 
     @FXML
-    private TableColumn<appointments, LocalDateTime> ATableCreateDate;
+    private TableColumn<Appointments, LocalDateTime> ATableCreateDate;
 
     @FXML
-    private TableColumn<appointments, String> ATableCreatedBy;
+    private TableColumn<Appointments, String> ATableCreatedBy;
 
     @FXML
-    private TableColumn<appointments, Integer> ATableCustomerID;
+    private TableColumn<Appointments, Integer> ATableCustomerID;
 
     @FXML
-    private TableColumn<appointments, String> ATableDescription;
+    private TableColumn<Appointments, String> ATableDescription;
 
     @FXML
-    private TableColumn<appointments, LocalDateTime> ATableEnd;
+    private TableColumn<Appointments, LocalDateTime> ATableEnd;
 
     @FXML
-    private TableColumn<appointments, Integer> ATableID;
+    private TableColumn<Appointments, Integer> ATableID;
 
     @FXML
-    private TableColumn<appointments, LocalDateTime> ATableLastUpdate;
+    private TableColumn<Appointments, LocalDateTime> ATableLastUpdate;
 
     @FXML
-    private TableColumn<appointments, String> ATableLastUpdatedBy;
+    private TableColumn<Appointments, String> ATableLastUpdatedBy;
 
     @FXML
-    private TableColumn<appointments, String> ATableLocation;
+    private TableColumn<Appointments, String> ATableLocation;
 
     @FXML
-    private TableColumn<appointments, LocalDateTime> ATableStart;
+    private TableColumn<Appointments, LocalDateTime> ATableStart;
 
     @FXML
-    private TableColumn<appointments, String> ATableTitle;
+    private TableColumn<Appointments, String> ATableTitle;
 
     @FXML
-    private TableColumn<appointments, String> ATableType;
+    private TableColumn<Appointments, String> ATableType;
 
     @FXML
-    private TableColumn<appointments, Integer> ATableUserID;
+    private TableColumn<Appointments, Integer> ATableUserID;
 
     @FXML
-    private TableColumn<customers, String> CTableAddress;
+    private TableColumn<Customers, String> CTableAddress;
 
     @FXML
-    private TableColumn<customers, LocalDateTime> CTableCreateDate;
+    private TableColumn<Customers, LocalDateTime> CTableCreateDate;
 
     @FXML
-    private TableColumn<customers, String> CTableCreatedBy;
+    private TableColumn<Customers, String> CTableCreatedBy;
 
     @FXML
-    private TableColumn<customers, Integer> CTableID;
+    private TableColumn<Customers, Integer> CTableID;
 
     @FXML
-    private TableColumn<customers, LocalDateTime> CTableLastUpdate;
+    private TableColumn<Customers, LocalDateTime> CTableLastUpdate;
 
     @FXML
-    private TableColumn<customers, String> CTableLastUpdatedBy;
+    private TableColumn<Customers, String> CTableLastUpdatedBy;
 
     @FXML
-    private TableColumn<customers, String> CTableName;
+    private TableColumn<Customers, String> CTableName;
 
     @FXML
-    private TableColumn<customers, String> CTablePostal;
+    private TableColumn<Customers, String> CTablePostal;
 
     @FXML
     private Button addApptButton;
@@ -101,10 +101,10 @@ public class mainPageController implements Initializable {
     private Button addCustomerButton;
 
     @FXML
-    private TableView<appointments> apptTable;
+    private TableView<Appointments> apptTable;
 
     @FXML
-    private TableView<customers> customerTable;
+    private TableView<Customers> customerTable;
 
     @FXML
     private Button deleteApptButton;
@@ -124,8 +124,8 @@ public class mainPageController implements Initializable {
     @FXML
     private AnchorPane mainPageAnchor;
 
-    private ObservableList<appointments> apptList = FXCollections.observableArrayList();
-    private ObservableList<customers> customerList = FXCollections.observableArrayList();
+    private ObservableList<Appointments> apptList = FXCollections.observableArrayList();
+    private ObservableList<Customers> customerList = FXCollections.observableArrayList();
 
 
     public void initialize(URL url, ResourceBundle resourceBundle){
@@ -135,13 +135,13 @@ public class mainPageController implements Initializable {
 
     private void CreateApptTable() {
         apptTable.setItems(apptList);
-        apptList.setAll(tables.getAllAppointments());
+        apptList.setAll(Tables.getAllAppointments());
         apptTable.refresh();
     }
 
     private void CreateCustomerTable() {
         //customerTable.setItems(customerList);
-       // customerList.setAll(tables.getAllCustomers());
+       // customerList.setAll(Tables.getAllCustomers());
         //customerTable.refresh();
     }
 
@@ -210,6 +210,11 @@ public class mainPageController implements Initializable {
         scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/reports.fxml")));
         stage.setScene(new Scene(scene,600,400));
         stage.show();
+    }
+    @FXML
+    void closeAppButton(ActionEvent event) {
+        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        stage.close();
     }
 
 }

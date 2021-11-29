@@ -6,10 +6,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import model.appointments;
-import model.tables;
+import model.Appointments;
+import model.Tables;
 
-import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,10 +20,12 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws SQLException {
         fillTables();
-       try{
+        //Appointments apptDemo = new Appointments(1,"hello","hello","location","type",null,null,null,"createdBy",null,"lastUpdatedBy",1,2,3);
+        //Tables.addAppointment(apptDemo);
+
+        try{
            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("logIn.fxml"));
            Scene scene = new Scene(fxmlLoader.load(), 400, 200);
-           stage.setTitle("Hello!");
            stage.setScene(scene);
            stage.setResizable(false);
            stage.setTitle("Java Client App");
@@ -73,11 +74,11 @@ public class Main extends Application {
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
-                appointments apptDemo = new appointments(1,"hello","hello","location","type",null,null,null,"createdBy",null,"lastUpdatedBy",1,2,3);
+               // appointments apptDemo = new appointments(1,"hello","hello","location","type",null,null,null,"createdBy",null,"lastUpdatedBy",1,2,3);
 
-                appointments appt = new appointments(apptID,title,description,location,type,start,end,createDate,createdBy,lastUpdate,lastUpdatedBy,customerID,userID,contactID);
+                Appointments appt = new Appointments(apptID,title,description,location,type,start,end,createDate,createdBy,lastUpdate,lastUpdatedBy,customerID,userID,contactID);
                 //System.out.println(apptID + title + description + location+type+start+end+createDate+createdBy+lastUpdate+lastUpdatedBy+customerID+userID+contactID);
-                tables.addAppointment(apptDemo);
+                Tables.addAppointment(appt);
             }
         } catch (Exception e){
             System.out.println(e.getMessage());
