@@ -50,7 +50,6 @@ public class Main extends Application {
         Connection connect = JDBC.getConnection();
         DBQuery.setStatement(connect);
         Statement statement = DBQuery.getStatement();
-        System.out.println("hello");
         //add data to appointments table.
         try{
             String query = "SELECT * from appointments";

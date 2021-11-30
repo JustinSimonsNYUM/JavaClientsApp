@@ -62,7 +62,6 @@ public class addCustomerController implements Initializable {
     void fillComboBoxes() throws SQLException {
         Connection connect = JDBC.getConnection();
         DBQuery.setStatement(connect);
-        myAlert("hello");
         Statement statement = DBQuery.getStatement();
         try{
             String query = "SELECT * from countries";

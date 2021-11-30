@@ -19,7 +19,6 @@ public class Tables {
     }
 
     public static Appointments getModifyAppt(){ return modifyAppt; }
-    int lint = 8;
     public static void setModifyCustomer(Customers customer){
         modifyCustomer = new Customers(customer.getId(),customer.getName(),customer.getAddress(),customer.getPostalCode(),customer.getPhone(),customer.getCreateDate(),customer.getCreatedBy(),customer.getLastUpdate(),customer.getLastUpdatedBy(),customer.getDivisionID());
     }
