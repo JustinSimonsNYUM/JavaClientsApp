@@ -118,7 +118,7 @@
                                 <Insets bottom="10.0" />
                             </VBox.margin>
                         </ComboBox>
-                        <ComboBox fx:id="editCustomerDivision" prefHeight="25.0" prefWidth="181.0" visibleRowCount="5">
+                        <ComboBox fx:id="editCustomerDivision" onMouseClicked="#editCustomerDivisionClicked" prefHeight="25.0" prefWidth="181.0" visibleRowCount="5">
                             <VBox.margin>
                                 <Insets bottom="9.0" />
                             </VBox.margin>

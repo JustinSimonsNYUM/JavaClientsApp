@@ -19,12 +19,19 @@ public class Tables {
     }
 
     public static Appointments getModifyAppt(){ return modifyAppt; }
+
     public static void setModifyCustomer(Customers customer){
         modifyCustomer = new Customers(customer.getId(),customer.getName(),customer.getAddress(),customer.getPostalCode(),customer.getPhone(),customer.getCreateDate(),customer.getCreatedBy(),customer.getLastUpdate(),customer.getLastUpdatedBy(),customer.getDivisionID());
     }
 
     public static Customers getModifyCustomer(){ return modifyCustomer; }
 
+    public static void updateCustomer(int index, Customers selectedCustomer){
+        for(Customers customer: allCustomers){
+            if(customer.getId() == selectedCustomer.getId())
+                allCustomers.set(index, selectedCustomer);
+        }
+    }
 
     public static ObservableList<Appointments> getAllAppointments(){ return allAppointments; }
 

@@ -144,17 +144,12 @@ public class addCustomerController implements Initializable {
         String name = addNewCustomerName.getText().trim();
         String address = addNewCustomerAddress.getText().trim();
         String postal = addNewCustomerPostal.getText().trim();
-        String country = addNewCustomerCountry.getValue();
-        String division = addNewCustomerDivision.getValue();
-        String phone = addNewCustomerPhone.getText().trim();
-
-        if(name.isEmpty() || address.isEmpty() || postal.isEmpty() || country.isEmpty() || division.isEmpty() || phone.isEmpty()){
-            myAlert("Please fill out each field.");
-            return;
-        }
         String selectedCountry = addNewCustomerCountry.getValue();
         String selectedDivision = addNewCustomerDivision.getValue();
-        if(selectedCountry == null) {
+        String phone = addNewCustomerPhone.getText().trim();
+
+        if( (selectedCountry == null) || (selectedDivision == null) || name.isEmpty() || address.isEmpty() || postal.isEmpty() || phone.isEmpty()){
+            myAlert("Please fill out each field.");
             return;
         }
         //get new customer data
@@ -178,7 +173,7 @@ public class addCustomerController implements Initializable {
             ResultSet rs = statement.getResultSet();
             while(rs.next()){
                 String oldDivision = rs.getString("Division");
-                if(oldDivision.equals(division))
+                if(oldDivision.equals(selectedDivision))
                     newDivision = rs.getInt("Division_ID");
             }
         } catch (Exception e){

@@ -25,8 +25,10 @@ public class Main extends Application {
         //Tables.addAppointment(apptDemo);
 
         try{
-           FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("logIn.fxml"));
-           Scene scene = new Scene(fxmlLoader.load(), 400, 200);
+            //*******************************CHANGE BACK TO LOGIN.FXML WHEN DONE*******************************
+           FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainPage.fxml"));
+           Scene scene = new Scene(fxmlLoader.load(), 1235, 558);
+           //Scene scene = new Scene(fxmlLoader.load(), 400, 200);
            stage.setScene(scene);
            stage.setResizable(false);
            stage.setTitle("Java Client App");
