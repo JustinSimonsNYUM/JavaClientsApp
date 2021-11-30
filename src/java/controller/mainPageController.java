@@ -182,7 +182,6 @@ public class mainPageController implements Initializable {
     @FXML
     void addCustomerButtonAction(ActionEvent event) {
         try {
-            //sdf
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/addCustomer.fxml")));
             stage.setScene(new Scene(scene, 600, 354));
