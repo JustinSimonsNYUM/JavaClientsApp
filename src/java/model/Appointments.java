@@ -41,39 +41,21 @@ public class Appointments {
         this.contactID = contactID;
     }
 
-    public LocalDateTime getStart() {
-        return start;
-    }
+    public LocalDateTime getStart() { return start; }
 
-    public void setStart(LocalDateTime start) {
-        this.start = start;
-    }
+    public void setStart(LocalDateTime start) { this.start = start; }
 
-    public LocalDateTime getEnd() {
-        return end;
-    }
+    public LocalDateTime getEnd() { return end; }
 
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
-    }
+    public void setEnd(LocalDateTime end) { this.end = end; }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
+    public LocalDateTime getCreateDate() { return createDate; }
 
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
+    public void setCreateDate(LocalDateTime createDate) { this.createDate = createDate; }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    //public Integer idProperty(){return id;}
+    public void setId(int id) { this.id = id; }
 
     public String getTitle() {
         return title;

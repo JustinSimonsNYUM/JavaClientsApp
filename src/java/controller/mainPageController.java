@@ -8,10 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.Appointments;
@@ -95,6 +92,9 @@ public class mainPageController implements Initializable {
     private TableColumn<Customers, String> CTablePostal;
 
     @FXML
+    private TableColumn<Customers, Integer> CTableDivisionID;
+
+    @FXML
     private Button addApptButton;
 
     @FXML
@@ -140,9 +140,9 @@ public class mainPageController implements Initializable {
     }
 
     private void CreateCustomerTable() {
-        //customerTable.setItems(customerList);
-       // customerList.setAll(Tables.getAllCustomers());
-        //customerTable.refresh();
+        customerTable.setItems(customerList);
+        customerList.setAll(Tables.getAllCustomers());
+        customerTable.refresh();
     }
 
     Stage stage;
@@ -164,18 +164,36 @@ public class mainPageController implements Initializable {
 
     @FXML
     void addApptButtonAction(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/addAppt.fxml")));
-        stage.setScene(new Scene(scene,600,504));
-        stage.show();
+        try {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/addAppt.fxml")));
+            stage.setScene(new Scene(scene, 600, 504));
+            stage.show();
+            apptList.setAll(Tables.getAllAppointments());
+            apptTable.setItems(apptList);
+            apptTable.refresh();
+        }
+        catch(Exception e){
+            myAlert(e.getMessage() + " closing program");
+            System.exit(0);
+        }
     }
 
     @FXML
     void addCustomerButtonAction(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/addCustomer.fxml")));
-        stage.setScene(new Scene(scene,600,354));
-        stage.show();
+        try {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/addCustomer.fxml")));
+            stage.setScene(new Scene(scene, 600, 354));
+            stage.show();
+            customerList.setAll(Tables.getAllCustomers());
+            customerTable.setItems(customerList);
+            customerTable.refresh();
+        }
+        catch(Exception e){
+            myAlert(e.getMessage() + " closing program");
+            System.exit(0);
+        }
     }
 
     @FXML
@@ -190,18 +208,44 @@ public class mainPageController implements Initializable {
 
     @FXML
     void editApptButtonAction(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/editAppt.fxml")));
-        stage.setScene(new Scene(scene,600,504));
-        stage.show();
+        Appointments modifyAppt = apptTable.getSelectionModel().getSelectedItem();
+        if (modifyAppt == null)
+            return;
+        Tables.setModifyAppt(modifyAppt);
+        try{
+            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/editAppt.fxml")));
+            stage.setScene(new Scene(scene,600,504));
+            stage.show();
+            apptList.setAll(Tables.getAllAppointments());
+            apptTable.setItems(apptList);
+            apptTable.refresh();
+        }
+        catch(Exception e){
+            myAlert(e.getMessage() + " closing program");
+            System.exit(0);
+        }
     }
 
     @FXML
     void editCustomerButtonAction(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/editCustomer.fxml")));
-        stage.setScene(new Scene(scene,600,354));
-        stage.show();
+        Customers modifyCustomer = customerTable.getSelectionModel().getSelectedItem();
+        if (modifyCustomer == null)
+            return;
+        Tables.setModifyCustomer(modifyCustomer);
+        try {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/editCustomer.fxml")));
+            stage.setScene(new Scene(scene, 600, 354));
+            stage.show();
+            customerList.setAll(Tables.getAllCustomers());
+            customerTable.setItems(customerList);
+            customerTable.refresh();
+        }
+        catch(Exception e){
+            myAlert(e.getMessage() + " closing program");
+            System.exit(0);
+        }
     }
 
     @FXML
@@ -215,6 +259,12 @@ public class mainPageController implements Initializable {
     void closeAppButton(ActionEvent event) {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         stage.close();
+    }
+
+    public void myAlert(String alert){
+        Alert a = new Alert(Alert.AlertType.ERROR);
+        a.setContentText(alert);
+        a.showAndWait();
     }
 
 }

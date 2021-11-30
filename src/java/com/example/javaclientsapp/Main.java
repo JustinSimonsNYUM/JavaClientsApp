@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import model.Appointments;
+import model.Customers;
 import model.Tables;
 
 import java.sql.*;
@@ -49,6 +50,7 @@ public class Main extends Application {
         Connection connect = JDBC.getConnection();
         DBQuery.setStatement(connect);
         Statement statement = DBQuery.getStatement();
+        //add data to appointments table.
         try{
             String query = "SELECT * from appointments";
             statement.execute(query);
@@ -74,20 +76,38 @@ public class Main extends Application {
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
-               // appointments apptDemo = new appointments(1,"hello","hello","location","type",null,null,null,"createdBy",null,"lastUpdatedBy",1,2,3);
 
                 Appointments appt = new Appointments(apptID,title,description,location,type,start,end,createDate,createdBy,lastUpdate,lastUpdatedBy,customerID,userID,contactID);
-                //System.out.println(apptID + title + description + location+type+start+end+createDate+createdBy+lastUpdate+lastUpdatedBy+customerID+userID+contactID);
                 Tables.addAppointment(appt);
             }
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
-        /*
-         Part washer = new InHouse(4, "Washer", 4.99, 40, 5,100,104);
-        Inventory.addPart(alWrench);
-         */
+        //add data to customers table
+        try{
+            String query = "SELECT * from customers";
+            statement.execute(query);
+            ResultSet rs = statement.getResultSet();
+            while(rs.next()){
+                int custID = rs.getInt("Customer_ID");
+                String name = rs.getString("Customer_Name");
+                String address = rs.getString("Address");
+                String postal = rs.getString("Postal_Code");
+                String phone = rs.getString("Phone");
+                LocalDate createDateDate = rs.getDate("Create_Date").toLocalDate();
+                LocalTime createDateTime = rs.getTime("Create_Date").toLocalTime();
+                LocalDateTime createDate = createDateDate.atTime(createDateTime);
+                String createdBy = rs.getString("Created_By");
+                LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
+                String lastUpdatedBy = rs.getString("Last_Updated_By");
+                int divID = rs.getInt("Division_ID");
 
+                Customers cust = new Customers(custID,name,address,postal,phone,createDate,createdBy,lastUpdate,lastUpdatedBy,divID);
+                Tables.addCustomer(cust);
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
     /*Connection connect = JDBC.getConnection();
         String insertStatement = "INSERT INTO countries (Country, Create_Date, Created_By, Last_Updated_By) VALUES (?,?,?,?)";
