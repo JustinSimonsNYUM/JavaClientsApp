@@ -163,7 +163,7 @@ public class mainPageController implements Initializable {
     }
 
     @FXML
-    void addApptButtonAction(ActionEvent event) throws IOException {
+    void addApptButtonAction(ActionEvent event) {
         try {
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/addAppt.fxml")));
@@ -180,8 +180,9 @@ public class mainPageController implements Initializable {
     }
 
     @FXML
-    void addCustomerButtonAction(ActionEvent event) throws IOException {
+    void addCustomerButtonAction(ActionEvent event) {
         try {
+            myAlert("hello");
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/addCustomer.fxml")));
             stage.setScene(new Scene(scene, 600, 354));
@@ -207,7 +208,7 @@ public class mainPageController implements Initializable {
     }
 
     @FXML
-    void editApptButtonAction(ActionEvent event) throws IOException {
+    void editApptButtonAction(ActionEvent event)  {
         Appointments modifyAppt = apptTable.getSelectionModel().getSelectedItem();
         if (modifyAppt == null)
             return;
@@ -228,7 +229,7 @@ public class mainPageController implements Initializable {
     }
 
     @FXML
-    void editCustomerButtonAction(ActionEvent event) throws IOException {
+    void editCustomerButtonAction(ActionEvent event)  {
         Customers modifyCustomer = customerTable.getSelectionModel().getSelectedItem();
         if (modifyCustomer == null)
             return;
