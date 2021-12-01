@@ -33,6 +33,34 @@ public class Tables {
         }
     }
 
+    public static boolean deleteCustomer(Customers selectedCustomer){
+        boolean found = false;
+
+        if(allCustomers.contains(selectedCustomer)){
+            int selectedCustomerID = selectedCustomer.getId();
+            //first delete all customer associated appointments
+            for(Customers customer: allCustomers){
+                if(customer.getId() == selectedCustomerID){
+                    allAppointments.removeIf(appt -> appt.getCustomerID() == selectedCustomerID);
+                }
+            }
+            //delete customer
+            allCustomers.remove(selectedCustomer);
+            found = true;
+        }
+        return found;
+    }
+
+    public static boolean deleteAppointment(Appointments selectedAppt){
+        boolean found = false;
+
+        if(allAppointments.contains(selectedAppt)){
+            allAppointments.remove(selectedAppt);
+            found = true;
+        }
+        return found;
+    }
+
     public static ObservableList<Appointments> getAllAppointments(){ return allAppointments; }
 
     public static ObservableList<Customers> getAllCustomers(){

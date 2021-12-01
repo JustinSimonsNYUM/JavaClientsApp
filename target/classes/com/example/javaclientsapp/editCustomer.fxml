@@ -10,140 +10,135 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="354.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.editCustomerController">
-    <children>
-        <Label layoutX="227.0" layoutY="14.0" text="Edit Customer" underline="true">
-            <font>
-                <Font name="System Bold" size="22.0" />
-            </font>
-        </Label>
-        <HBox layoutX="14.0" layoutY="59.0" prefHeight="257.0" prefWidth="482.0">
-            <children>
-                <VBox alignment="CENTER_LEFT" prefHeight="257.0" prefWidth="163.0">
-                    <children>
-                        <Label text="Customer ID">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </Label>
-                        <Label text="First and Last Name">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </Label>
-                        <Label text="Address">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </Label>
-                        <Label text="Postal Code">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </Label>
-                        <Label text="Country">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </Label>
-                        <Label text="Division">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </Label>
-                        <Label text="Phone Number">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                    </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                </VBox>
-                <VBox prefHeight="257.0" prefWidth="223.0">
-                    <children>
-                        <TextField fx:id="editCustomerID" disable="true" prefHeight="25.0" prefWidth="248.0">
-                            <VBox.margin>
-                                <Insets bottom="9.0" top="-6.0" />
-                            </VBox.margin>
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                        </TextField>
-                        <TextField fx:id="editCustomerName">
-                            <VBox.margin>
-                                <Insets bottom="4.0" />
-                            </VBox.margin>
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                        </TextField>
-                        <TextField fx:id="editCustomerAddress">
-                            <VBox.margin>
-                                <Insets bottom="6.0" />
-                            </VBox.margin>
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                        </TextField>
-                        <TextField fx:id="editCustomerPostal" prefHeight="31.0" prefWidth="192.0">
-                            <VBox.margin>
-                                <Insets bottom="12.0" />
-                            </VBox.margin>
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                        </TextField>
-                        <ComboBox fx:id="editCustomerCountry" prefHeight="25.0" prefWidth="181.0" visibleRowCount="5">
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </ComboBox>
-                        <ComboBox fx:id="editCustomerDivision" onMouseClicked="#editCustomerDivisionClicked" prefHeight="25.0" prefWidth="181.0" visibleRowCount="5">
-                            <VBox.margin>
-                                <Insets bottom="9.0" />
-                            </VBox.margin>
-                        </ComboBox>
-                        <TextField fx:id="editCustomerPhone">
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets />
-                            </VBox.margin>
-                        </TextField>
-                    </children>
-                </VBox>
-            </children>
-        </HBox>
-        <Button layoutX="508.0" layoutY="316.0" mnemonicParsing="false" onAction="#editCustomerSubmitButton" text="Submit">
-            <font>
-                <Font size="15.0" />
-            </font>
-        </Button>
-        <Button layoutX="413.0" layoutY="316.0" mnemonicParsing="false" onAction="#editCustomerCancelButton" text="Cancel">
-            <font>
-                <Font size="15.0" />
-            </font>
-        </Button>
-    </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="354.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.editCustomerController">
+    <Label layoutX="227.0" layoutY="14.0" text="Edit Customer" underline="true">
+        <font>
+            <Font name="System Bold" size="22.0"/>
+        </font>
+    </Label>
+    <HBox layoutX="14.0" layoutY="59.0" prefHeight="257.0" prefWidth="482.0">
+        <VBox alignment="CENTER_LEFT" prefHeight="257.0" prefWidth="163.0">
+            <opaqueInsets>
+                <Insets/>
+            </opaqueInsets>
+            <Label text="Customer ID">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+                <VBox.margin>
+                    <Insets bottom="10.0"/>
+                </VBox.margin>
+            </Label>
+            <Label text="First and Last Name">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+                <VBox.margin>
+                    <Insets bottom="10.0"/>
+                </VBox.margin>
+            </Label>
+            <Label text="Address">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+                <VBox.margin>
+                    <Insets bottom="10.0"/>
+                </VBox.margin>
+            </Label>
+            <Label text="Postal Code">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+                <VBox.margin>
+                    <Insets bottom="10.0"/>
+                </VBox.margin>
+            </Label>
+            <Label text="Country">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+                <VBox.margin>
+                    <Insets bottom="10.0"/>
+                </VBox.margin>
+            </Label>
+            <Label text="Division">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+                <VBox.margin>
+                    <Insets bottom="10.0"/>
+                </VBox.margin>
+            </Label>
+            <Label text="Phone Number">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+            </Label>
+        </VBox>
+        <VBox prefHeight="257.0" prefWidth="223.0">
+            <TextField fx:id="editCustomerID" disable="true" prefHeight="25.0" prefWidth="248.0">
+                <VBox.margin>
+                    <Insets bottom="9.0" top="-6.0"/>
+                </VBox.margin>
+                <font>
+                    <Font size="15.0"/>
+                </font>
+            </TextField>
+            <TextField fx:id="editCustomerName">
+                <VBox.margin>
+                    <Insets bottom="4.0"/>
+                </VBox.margin>
+                <font>
+                    <Font size="15.0"/>
+                </font>
+            </TextField>
+            <TextField fx:id="editCustomerAddress">
+                <VBox.margin>
+                    <Insets bottom="6.0"/>
+                </VBox.margin>
+                <font>
+                    <Font size="15.0"/>
+                </font>
+            </TextField>
+            <TextField fx:id="editCustomerPostal" prefHeight="31.0" prefWidth="192.0">
+                <VBox.margin>
+                    <Insets bottom="12.0"/>
+                </VBox.margin>
+                <font>
+                    <Font size="15.0"/>
+                </font>
+            </TextField>
+            <ComboBox fx:id="editCustomerCountry" prefHeight="25.0" prefWidth="181.0" visibleRowCount="5">
+                <VBox.margin>
+                    <Insets bottom="10.0"/>
+                </VBox.margin>
+            </ComboBox>
+            <ComboBox fx:id="editCustomerDivision" onMouseClicked="#editCustomerDivisionClicked"
+                      prefHeight="25.0" prefWidth="181.0" visibleRowCount="5">
+                <VBox.margin>
+                    <Insets bottom="9.0"/>
+                </VBox.margin>
+            </ComboBox>
+            <TextField fx:id="editCustomerPhone">
+                <font>
+                    <Font size="15.0"/>
+                </font>
+                <VBox.margin>
+                    <Insets/>
+                </VBox.margin>
+            </TextField>
+        </VBox>
+    </HBox>
+    <Button layoutX="508.0" layoutY="316.0" mnemonicParsing="false" onAction="#editCustomerSubmitButton" text="Submit">
+        <font>
+            <Font size="15.0"/>
+        </font>
+    </Button>
+    <Button layoutX="413.0" layoutY="316.0" mnemonicParsing="false" onAction="#editCustomerCancelButton" text="Cancel">
+        <font>
+            <Font size="15.0"/>
+        </font>
+    </Button>
 </AnchorPane>

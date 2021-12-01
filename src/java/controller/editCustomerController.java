@@ -27,6 +27,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -163,7 +164,7 @@ public class editCustomerController implements Initializable {
         String createdBy = "script";
         LocalDate lastUpdateDate = LocalDate.now();
         LocalTime lastUpdateTime = LocalTime.now();
-        LocalDateTime lastUpdate = lastUpdateDate.atTime(lastUpdateTime);
+        LocalDateTime lastUpdate = LocalDateTime.of(lastUpdateDate,lastUpdateTime).truncatedTo(ChronoUnit.MINUTES);
         String lastUpdatedBy = "script";
         int newDivision = 0;
 

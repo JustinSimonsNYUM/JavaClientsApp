@@ -2,9 +2,9 @@ package model;
 
 
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import java.time.LocalDateTime;
 
 public class Appointments {
@@ -14,11 +14,11 @@ public class Appointments {
     private String description;
     private String location;
     private String type;
-    private LocalDateTime start;
-    private LocalDateTime end;
-    private LocalDateTime createDate;
+    private final ObjectProperty<LocalDateTime> start = new SimpleObjectProperty<>();
+    private final ObjectProperty<LocalDateTime> end = new SimpleObjectProperty<>();
+    private final ObjectProperty<LocalDateTime> createDate = new SimpleObjectProperty<>();
     private String createdBy;
-    private LocalDateTime lastUpdate;
+    private final ObjectProperty<LocalDateTime> lastUpdate = new SimpleObjectProperty<>();
     private String lastUpdatedBy;
     private int customerID;
     private int userID;
@@ -30,28 +30,34 @@ public class Appointments {
         this.description = description;
         this.location = location;
         this.type = type;
-        this.start = start;
-        this.end = end;
-        this.createDate = createDate;
+        this.start.set(start);
+        this.end.set(end);
+        this.createDate.set(createDate);
+        //this.createDate = createDate;
         this.createdBy = createdBy;
-        this.lastUpdate = lastUpdate;
+        this.lastUpdate.set(lastUpdate);
         this.lastUpdatedBy = lastUpdatedBy;
         this.customerID = customerID;
         this.userID = userID;
         this.contactID = contactID;
     }
+    public ObservableValue<LocalDateTime> startProperty() { return start; }
 
-    public LocalDateTime getStart() { return start; }
+    public LocalDateTime getStart() { return start.get(); }
 
-    public void setStart(LocalDateTime start) { this.start = start; }
+    public void setStart(LocalDateTime start) { this.start.set(start); }
 
-    public LocalDateTime getEnd() { return end; }
+    public ObservableValue<LocalDateTime> endProperty() { return end; }
 
-    public void setEnd(LocalDateTime end) { this.end = end; }
+    public LocalDateTime getEnd() { return end.get(); }
 
-    public LocalDateTime getCreateDate() { return createDate; }
+    public void setEnd(LocalDateTime end) { this.end.set(end); }
 
-    public void setCreateDate(LocalDateTime createDate) { this.createDate = createDate; }
+    public ObjectProperty<LocalDateTime> createDateProperty() { return createDate; }
+
+    public LocalDateTime getCreateDate() { return createDate.get(); }
+
+    public void setCreateDate(LocalDateTime createDate) { this.createDate.set(createDate); }
 
     public int getId() { return id; }
 
@@ -97,12 +103,14 @@ public class Appointments {
         this.createdBy = createdBy;
     }
 
+    public ObservableValue<LocalDateTime> lastUpdateProperty() { return lastUpdate; }
+
     public LocalDateTime getLastUpdate() {
-        return lastUpdate;
+        return lastUpdate.get();
     }
 
     public void setLastUpdate(LocalDateTime lastUpdate) {
-        this.lastUpdate = lastUpdate;
+        this.lastUpdate.set(lastUpdate);
     }
 
     public String getLastUpdatedBy() {
@@ -136,6 +144,5 @@ public class Appointments {
     public void setContactID(int contactID) {
         this.contactID = contactID;
     }
-
 
 }

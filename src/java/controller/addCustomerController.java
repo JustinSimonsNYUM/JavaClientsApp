@@ -26,6 +26,8 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -156,11 +158,12 @@ public class addCustomerController implements Initializable {
         customerID++;
         LocalDate createDateDate = LocalDate.now();
         LocalTime createDateTime = LocalTime.now();
-        LocalDateTime createDate = createDateDate.atTime(createDateTime);
+        LocalDateTime createDate = LocalDateTime.of(createDateDate,createDateTime).truncatedTo(ChronoUnit.MINUTES);
         String createdBy = "script";
         LocalDate lastUpdateDate = LocalDate.now();
         LocalTime lastUpdateTime = LocalTime.now();
-        LocalDateTime lastUpdate = lastUpdateDate.atTime(lastUpdateTime);
+        LocalDateTime lastUpdate = LocalDateTime.of(lastUpdateDate,lastUpdateTime).truncatedTo(ChronoUnit.MINUTES);
+        //LocalDateTime lastUpdateDemo = lastUpdate.format(DateTimeFormatter.ofPattern(""));
         String lastUpdatedBy = "script";
         int newDivision = 0;
         //get the proper division ID

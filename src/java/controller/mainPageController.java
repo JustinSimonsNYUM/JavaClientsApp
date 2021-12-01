@@ -17,7 +17,11 @@ import model.Tables;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -131,6 +135,7 @@ public class mainPageController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle){
         CreateApptTable();
         CreateCustomerTable();
+        SetDateTimeFormats();
     }
 
     private void CreateApptTable() {
@@ -143,6 +148,88 @@ public class mainPageController implements Initializable {
         customerTable.setItems(customerList);
         customerList.setAll(Tables.getAllCustomers());
         customerTable.refresh();
+    }
+
+    private void SetDateTimeFormats(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
+
+        ATableCreateDate.setCellValueFactory(cellData -> cellData.getValue().createDateProperty());
+        ATableCreateDate.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+
+                super.updateItem(item, empty);
+                if (empty)
+                    setText(null);
+                else
+                    setText(item.format(formatter));
+            }
+        });
+
+        ATableEnd.setCellValueFactory(cellData -> cellData.getValue().endProperty());
+        ATableEnd.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+
+                super.updateItem(item, empty);
+                if (empty)
+                    setText(null);
+                else
+                    setText(item.format(formatter));
+            }
+        });
+
+        ATableLastUpdate.setCellValueFactory(cellData -> cellData.getValue().lastUpdateProperty());
+        ATableLastUpdate.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+
+                super.updateItem(item, empty);
+                if (empty)
+                    setText(null);
+                else
+                    setText(item.format(formatter));
+            }
+        });
+
+        ATableStart.setCellValueFactory(cellData -> cellData.getValue().startProperty());
+        ATableStart.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+
+                super.updateItem(item, empty);
+                if (empty)
+                    setText(null);
+                else
+                    setText(item.format(formatter));
+            }
+        });
+
+        CTableCreateDate.setCellValueFactory(cellData -> cellData.getValue().createDateProperty());
+        CTableCreateDate.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+
+                super.updateItem(item, empty);
+                if (empty)
+                    setText(null);
+                else
+                    setText(item.format(formatter));
+            }
+        });
+
+        CTableLastUpdate.setCellValueFactory(cellData -> cellData.getValue().lastUpdateProperty());
+        CTableLastUpdate.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+
+                super.updateItem(item, empty);
+                if (empty)
+                    setText(null);
+                else
+                    setText(item.format(formatter));
+            }
+        });
     }
 
     Stage stage;
@@ -198,12 +285,39 @@ public class mainPageController implements Initializable {
 
     @FXML
     void deleteApptButtonAction(ActionEvent event) {
+        Appointments selectedAppt = apptTable.getSelectionModel().getSelectedItem();
+        if(selectedAppt == null){
+            myAlert("Either no appointment was found in database or no customer is selected.");
+            return;
+        }
+
+        boolean apptBool = Tables.deleteAppointment(selectedAppt);
+        if(apptBool) {
+            apptList.setAll(Tables.getAllAppointments());
+            apptTable.setItems(apptList);
+            apptTable.refresh();
+            myAlert("The appointment with ID: " + selectedAppt.getId() + ", and title: " + selectedAppt.getTitle() + ", has been deleted.");
+        }
 
     }
 
     @FXML
     void deleteCustomerButtonAction(ActionEvent event) {
-
+        Customers selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
+        if(selectedCustomer == null) {
+            myAlert("Either no customer was found in database or no customer is selected.");
+            return;
+        }
+        boolean customerBool = Tables.deleteCustomer(selectedCustomer);
+        if(customerBool) {
+            customerList.remove(selectedCustomer);
+            customerTable.setItems(customerList);
+            customerTable.refresh();
+            apptList.setAll(Tables.getAllAppointments());
+            apptTable.setItems(apptList);
+            apptTable.refresh();
+            myAlert(selectedCustomer.getName() + "has been deleted along with their appointments.");
+        }
     }
 
     @FXML

@@ -1,5 +1,9 @@
 package model;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
+
 import java.sql.Timestamp;
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -13,9 +17,9 @@ public class Customers {
     private String address;
     private String postalCode;
     private String phone;
-    private LocalDateTime createDate;
+    private final ObjectProperty<LocalDateTime> createDate = new SimpleObjectProperty<>();
     private String createdBy;
-    private LocalDateTime lastUpdate;
+    private final ObjectProperty<LocalDateTime> lastUpdate = new SimpleObjectProperty<>();
     private String lastUpdatedBy;
     private int divisionID;
 
@@ -25,9 +29,9 @@ public class Customers {
         this.address = address;
         this.postalCode = postalCode;
         this.phone = phone;
-        this.createDate = createDate;
+        this.createDate.set(createDate);
         this.createdBy = createdBy;
-        this.lastUpdate = lastUpdate;
+        this.lastUpdate.set(lastUpdate);
         this.lastUpdatedBy = lastUpdatedBy;
         this.divisionID = divisionID;
     }
@@ -72,20 +76,24 @@ public class Customers {
         this.phone = phone;
     }
 
+    public ObservableValue<LocalDateTime> createDateProperty() { return createDate; }
+
     public LocalDateTime getCreateDate() {
-        return createDate;
+        return createDate.get();
     }
 
     public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
+        this.createDate.set(createDate);
     }
 
+    public ObservableValue<LocalDateTime> lastUpdateProperty() { return lastUpdate; }
+
     public LocalDateTime getLastUpdate() {
-        return lastUpdate;
+        return lastUpdate.get();
     }
 
     public void setLastUpdate(LocalDateTime lastUpdate) {
-        this.lastUpdate = lastUpdate;
+        this.lastUpdate.set(lastUpdate);
     }
 
     public String getCreatedBy() {
@@ -95,7 +103,6 @@ public class Customers {
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
-
 
     public String getLastUpdatedBy() {
         return lastUpdatedBy;
