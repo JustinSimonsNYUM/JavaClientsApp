@@ -33,7 +33,6 @@ public class Appointments {
         this.start.set(start);
         this.end.set(end);
         this.createDate.set(createDate);
-        //this.createDate = createDate;
         this.createdBy = createdBy;
         this.lastUpdate.set(lastUpdate);
         this.lastUpdatedBy = lastUpdatedBy;

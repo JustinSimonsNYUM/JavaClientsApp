@@ -2,6 +2,7 @@ package controller;
 
 import helper.DBQuery;
 import helper.JDBC;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,13 +11,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Customers;
 import model.Tables;
+import model.ZoneTimes;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -34,7 +40,7 @@ public class addApptController implements Initializable {
     private TextField addNewApptDescription;
 
     @FXML
-    private ComboBox<String> addNewApptEndTime;
+    private ComboBox<LocalTime> addNewApptEndTime;
 
     @FXML
     private TextField addNewApptID;
@@ -43,7 +49,7 @@ public class addApptController implements Initializable {
     private TextField addNewApptLocation;
 
     @FXML
-    private ComboBox<String> addNewApptStartTime;
+    private ComboBox<LocalTime> addNewApptStartTime;
 
     @FXML
     private TextField addNewApptTitle;
@@ -53,6 +59,9 @@ public class addApptController implements Initializable {
 
     @FXML
     private ComboBox<Integer> addNewApptUserID;
+
+    ObservableList<LocalTime> localStartTimes = ZoneTimes.setLocalStartTimes();
+    ObservableList<LocalTime> localEndTimes = ZoneTimes.setLocalEndTimes();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -104,14 +113,49 @@ public class addApptController implements Initializable {
         addNewApptType.getItems().add("De-Briefing");
         addNewApptType.getItems().add("Training");
 
-        //fill start time combo box
-        // business hours defined as 8:00 a.m. to 10:00 p.m. make it so it shows local time appts.
-        addNewApptStartTime.getItems().add("");
+        //fill start time combo box with the local time versions of the business hours.8:00 a.m. to 10:00 p.m. EST
+        addNewApptStartTime.getItems().addAll(localStartTimes);
+
+        // fill end time combo box.
+        addNewApptEndTime.getItems().addAll(localEndTimes);
+
+        //disable weekends and all previous days on datepicker
+        addNewApptDate.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                setDisable(empty || date.compareTo(today) < 0 );
+
+                if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #808080;");
+                }
+            }
+        });
 
     }
 
     Stage stage;
     Parent scene;
+
+    public void addNewApptStartTimeClicked(MouseEvent mouseEvent) {
+        LocalTime selectedEndTime = addNewApptEndTime.getValue();
+        if(selectedEndTime == null) {
+            return;
+        }
+        ObservableList<LocalTime> availableTimes = FXCollections.observableArrayList();
+        LocalTime lastTime = localStartTimes.get(localStartTimes.size() - 1);
+        for(LocalTime time : localStartTimes){
+            if((time.isBefore(selectedEndTime)))// && time.isBefore(lastTime))
+                availableTimes.add(time);
+        }
+
+        addNewApptStartTime.getItems().setAll(availableTimes);
+    }
+
+    public void addNewApptEndTimeClicked(MouseEvent mouseEvent) {
+    }
+
 
     @FXML
     void addNewApptCancelButton(ActionEvent event) throws IOException {
@@ -128,6 +172,4 @@ public class addApptController implements Initializable {
         stage.setScene(new Scene(scene,1235,558));
         stage.show();
     }
-
-
 }

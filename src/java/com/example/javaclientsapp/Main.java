@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import model.Appointments;
 import model.Customers;
 import model.Tables;
+import model.ZoneTimes;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -23,7 +24,6 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws SQLException {
         fillTables();
-
         try{
             //*******************************CHANGE BACK TO LOGIN.FXML WHEN DONE*******************************
            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainPage.fxml"));
