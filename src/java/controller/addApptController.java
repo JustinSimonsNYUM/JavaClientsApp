@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import model.Appointments;
 import model.Customers;
 import model.Tables;
 import model.ZoneTimes;
@@ -22,7 +23,9 @@ import java.net.URL;
 import java.sql.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -62,6 +65,9 @@ public class addApptController implements Initializable {
 
     ObservableList<LocalTime> localStartTimes = ZoneTimes.setLocalStartTimes();
     ObservableList<LocalTime> localEndTimes = ZoneTimes.setLocalEndTimes();
+    ObservableList<LocalDateTime> localStartDateTimes = ZoneTimes.getLocalDateStartTimes();
+    ObservableList<LocalDateTime> localEndDateTimes = ZoneTimes.getLocalDateEndTimes();
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -135,25 +141,58 @@ public class addApptController implements Initializable {
 
     }
 
+    private static int apptID = 2;
+
     Stage stage;
     Parent scene;
 
-    public void addNewApptStartTimeClicked(MouseEvent mouseEvent) {
+    @FXML
+    void addNewApptStartTimeClicked(MouseEvent mouseEvent) {
         LocalTime selectedEndTime = addNewApptEndTime.getValue();
         if(selectedEndTime == null) {
             return;
         }
-        ObservableList<LocalTime> availableTimes = FXCollections.observableArrayList();
-        LocalTime lastTime = localStartTimes.get(localStartTimes.size() - 1);
-        for(LocalTime time : localStartTimes){
-            if((time.isBefore(selectedEndTime)))// && time.isBefore(lastTime))
-                availableTimes.add(time);
-        }
+        LocalDateTime selectedEndDateTime;
+        if(selectedEndTime.equals(LocalTime.MIDNIGHT) || ((selectedEndTime.isAfter(LocalTime.MIDNIGHT)) && (selectedEndTime.isBefore(localStartTimes.get(0)))))
+            selectedEndDateTime = LocalDateTime.of(LocalDate.now().plusDays(1),selectedEndTime);
+        else
+            selectedEndDateTime = LocalDateTime.of(LocalDate.now(),selectedEndTime);
 
-        addNewApptStartTime.getItems().setAll(availableTimes);
+        addNewApptStartTime.getItems().clear();
+        for(LocalDateTime time : localStartDateTimes){
+            if(time.isBefore(selectedEndDateTime)) {
+                addNewApptStartTime.getItems().add(time.toLocalTime());
+            }
+            else
+                return;
+        }
     }
 
-    public void addNewApptEndTimeClicked(MouseEvent mouseEvent) {
+
+    @FXML
+    void addNewApptEndTimeClicked(MouseEvent mouseEvent) {
+        LocalTime selectedStartTime = addNewApptStartTime.getValue();
+        if(selectedStartTime == null) {
+            return;
+        }
+        LocalDateTime selectedStartDateTime;
+        if(selectedStartTime.equals(LocalTime.MIDNIGHT) || ((selectedStartTime.isAfter(LocalTime.MIDNIGHT)) && (selectedStartTime.isBefore(localStartTimes.get(0)))))
+            selectedStartDateTime = LocalDateTime.of(LocalDate.now().plusDays(1),selectedStartTime);
+        else
+            selectedStartDateTime = LocalDateTime.of(LocalDate.now(),selectedStartTime);
+
+        addNewApptEndTime.getItems().clear();
+        boolean timesMatch = false;
+        for(LocalDateTime time : localEndDateTimes){
+            if(timesMatch) {
+                if (time.isAfter(selectedStartDateTime)) {
+                    addNewApptEndTime.getItems().add(time.toLocalTime());
+                } else
+                    return;
+            }
+            if(time.equals(selectedStartDateTime))
+                timesMatch = true;
+        }
     }
 
 
@@ -166,10 +205,79 @@ public class addApptController implements Initializable {
     }
 
     @FXML
-    void addNewApptSubmitButton(ActionEvent event) throws IOException {
+    void addNewApptSubmitButton(ActionEvent event) throws IOException, SQLException {
+        Integer userID = addNewApptUserID.getValue();
+        Integer customerID = addNewApptCustomerID.getValue();
+        String title = addNewApptTitle.getText().trim();
+        String description = addNewApptDescription.getText().trim();
+        String location = addNewApptLocation.getText().trim();
+        String selectedContactName = addNewApptContact.getValue();
+        String type = addNewApptType.getValue();
+        LocalDate date = addNewApptDate.getValue();
+        LocalTime startTime = addNewApptStartTime.getValue();
+        LocalTime endTime = addNewApptEndTime.getValue();
+
+        //make sure each field is filled in
+        if((userID == null) || (customerID == null) || (title.isEmpty()) || (description.isEmpty()) || (location.isEmpty()) || (selectedContactName == null) || (type == null) || (date == null) || (startTime == null) || (endTime == null) )  {
+            myAlert("Please fill out each field.");
+            return;
+        }
+
+
+        //get the rest of the new appt data: createDate, createdBy, lastUpdate,LastUpdatedBY, contactID
+        apptID++;
+        LocalDate createDateDate = LocalDate.now();
+        LocalTime createDateTime = LocalTime.now();
+        LocalDateTime createDate = LocalDateTime.of(createDateDate,createDateTime).truncatedTo(ChronoUnit.MINUTES);
+        String createdBy = "script";
+        LocalDate lastUpdateDate = LocalDate.now();
+        LocalTime lastUpdateTime = LocalTime.now();
+        LocalDateTime lastUpdate = LocalDateTime.of(lastUpdateDate,lastUpdateTime).truncatedTo(ChronoUnit.MINUTES);
+        String lastUpdatedBy = "script";
+        //set the startDateTimes
+        LocalDateTime startDateTime;
+        if(startTime.equals(LocalTime.MIDNIGHT) || startTime.isAfter(LocalTime.MIDNIGHT))
+            startDateTime = LocalDateTime.of(date.plusDays(1),startTime);
+        else
+            startDateTime = LocalDateTime.of(date,startTime);
+
+        //set the endDateTimes
+        LocalDateTime endDateTime;
+        if(endTime.equals(LocalTime.MIDNIGHT) || endTime.isAfter(LocalTime.MIDNIGHT))
+            endDateTime = LocalDateTime.of(date.plusDays(1),endTime);
+        else
+            endDateTime = LocalDateTime.of(date,endTime);
+
+        int contactID = 0;
+
+        //get the proper division ID
+        Connection connect = JDBC.getConnection();
+        DBQuery.setStatement(connect);
+        Statement statement = DBQuery.getStatement();
+        try{
+            String query = "SELECT * from contacts";
+            statement.execute(query);
+            ResultSet rs = statement.getResultSet();
+            while(rs.next()){
+                String nextContactName = rs.getString("Contact_Name");
+                if(nextContactName.equals(selectedContactName))
+                    contactID = rs.getInt("Contact_ID");
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        Tables.addAppointment(new Appointments(apptID, title, description, location, type, startDateTime, endDateTime, createDate, createdBy, lastUpdate, lastUpdatedBy, customerID, userID, contactID));
+
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/mainPage.fxml")));
         stage.setScene(new Scene(scene,1235,558));
         stage.show();
+    }
+
+    private void myAlert(String alert){
+        Alert a = new Alert(Alert.AlertType.ERROR);
+        a.setContentText(alert);
+        a.show();
     }
 }

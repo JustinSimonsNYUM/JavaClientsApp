@@ -25,7 +25,7 @@ public class Main extends Application {
     public void start(Stage stage) throws SQLException {
         fillTables();
         try{
-            //*******************************CHANGE BACK TO LOGIN.FXML WHEN DONE*******************************
+            //*******************************CHANGE BACK TO logIn.FXML WHEN DONE*******************************
            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainPage.fxml"));
            Scene scene = new Scene(fxmlLoader.load(), 1235, 558);
            //Scene scene = new Scene(fxmlLoader.load(), 400, 200);

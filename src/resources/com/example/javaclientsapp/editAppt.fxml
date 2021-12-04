@@ -129,7 +129,7 @@
                     <Insets bottom="8.0"/>
                 </VBox.margin>
             </ComboBox>
-            <TextField fx:id="editApptApptTitle">
+            <TextField fx:id="editApptTitle">
                 <VBox.margin>
                     <Insets bottom="5.0"/>
                 </VBox.margin>

@@ -61,12 +61,12 @@ public class editCustomerController implements Initializable {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        Customers newCustomer = Tables.getModifyCustomer();
-        editCustomerAddress.setText(newCustomer.getAddress());
-        editCustomerID.setText(String.valueOf(newCustomer.getId()));
-        editCustomerName.setText(newCustomer.getName());
-        editCustomerPhone.setText(newCustomer.getPhone());
-        editCustomerPostal.setText(newCustomer.getPostalCode());
+        Customers modifyCustomer = Tables.getModifyCustomer();
+        editCustomerAddress.setText(modifyCustomer.getAddress());
+        editCustomerID.setText(String.valueOf(modifyCustomer.getId()));
+        editCustomerName.setText(modifyCustomer.getName());
+        editCustomerPhone.setText(modifyCustomer.getPhone());
+        editCustomerPostal.setText(modifyCustomer.getPostalCode());
     }
 
     void selectCountryAndDivision() throws SQLException{

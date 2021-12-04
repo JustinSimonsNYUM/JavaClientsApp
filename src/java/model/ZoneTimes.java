@@ -8,10 +8,16 @@ import java.time.*;
 
 public class ZoneTimes {
 
-    private static ZoneId localZoneID;
-    private final ZoneId UTCZoneID = ZoneId.of("UTC");
-    private final ZoneId ESTZoneID = ZoneId.of("EST");
+    private static ObservableList<LocalDateTime> localdateStartTimes = FXCollections.observableArrayList();
+    private static ObservableList<LocalDateTime> localdateEndTimes = FXCollections.observableArrayList();
 
+    public static ObservableList<LocalDateTime> getLocalDateStartTimes(){
+        return localdateStartTimes;
+    }
+
+    public static ObservableList<LocalDateTime> getLocalDateEndTimes(){
+        return localdateEndTimes;
+    }
 
     public static ObservableList<LocalTime> setLocalStartTimes(){
         ObservableList<LocalTime> localStartTimes = FXCollections.observableArrayList();
@@ -26,11 +32,12 @@ public class ZoneTimes {
 
         LocalTime ESTTimes = LocalTime.of(8,0);
         long addMinutes = 15;
-        for(int i = 0; i < 53 ; i++){
+        for(int i = 0; i < 56 ; i++){
             ESTDateTime = LocalDateTime.of(myLD,ESTTimes);
             ESTZonedDateTime = ZonedDateTime.of(ESTDateTime,ESTZoneID);
             ZonedDateTime UTCZonedDateTime = ZonedDateTime.ofInstant(ESTZonedDateTime.toInstant(), UTCZoneID);
             ZonedDateTime localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), localZoneID);
+            localdateStartTimes.add(localZonedDateTime.toLocalDateTime());
             localTime = localZonedDateTime.toLocalTime();
             localStartTimes.add(localTime);
             //add 15 minutes to time.
@@ -56,6 +63,8 @@ public class ZoneTimes {
             ESTZonedDateTime = ZonedDateTime.of(ESTDateTime,ESTZoneID);
             ZonedDateTime UTCZonedDateTime = ZonedDateTime.ofInstant(ESTZonedDateTime.toInstant(), UTCZoneID);
             ZonedDateTime localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), localZoneID);
+            localdateEndTimes.add(localZonedDateTime.toLocalDateTime());
+
             localTime = localZonedDateTime.toLocalTime();
             localEndTimes.add(localTime);
             //add 15 minutes to time.

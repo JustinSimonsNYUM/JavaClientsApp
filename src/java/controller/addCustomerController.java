@@ -163,7 +163,6 @@ public class addCustomerController implements Initializable {
         LocalDate lastUpdateDate = LocalDate.now();
         LocalTime lastUpdateTime = LocalTime.now();
         LocalDateTime lastUpdate = LocalDateTime.of(lastUpdateDate,lastUpdateTime).truncatedTo(ChronoUnit.MINUTES);
-        //LocalDateTime lastUpdateDemo = lastUpdate.format(DateTimeFormatter.ofPattern(""));
         String lastUpdatedBy = "script";
         int newDivision = 0;
         //get the proper division ID
