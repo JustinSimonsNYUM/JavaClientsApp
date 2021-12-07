@@ -1,7 +1,15 @@
 package model;
 
+import helper.DBQuery;
+import helper.JDBC;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
 
 public class Tables {
 
@@ -10,7 +18,41 @@ public class Tables {
     private static Appointments modifyAppt;
     private static Customers modifyCustomer;
 
-    public static void addAppointment(Appointments newAppointment){allAppointments.add(newAppointment); }
+    public static void addAppointment(Appointments newAppointment){ allAppointments.add(newAppointment); }
+
+    //********************ADD THE NEW APPT TO THE ALLAPPOINTMENTS AND TO THE MySQL DATABASE
+    public static void addNewAppointment(Appointments newAppointment) throws SQLException {
+        Connection connect = JDBC.getConnection();
+        DBQuery.setStatement(connect);
+        Statement statement = DBQuery.getStatement();
+        //add data to appointments table.
+        int id = newAppointment.getId();
+        String title = newAppointment.getTitle();
+        String description = newAppointment.getDescription();
+        String location = newAppointment.getLocation();
+        String type = newAppointment.getType();
+        LocalDateTime start = newAppointment.getStart();
+        LocalDateTime end = newAppointment.getEnd();
+        LocalDateTime createDate = newAppointment.getCreateDate();
+        String createdBy = newAppointment.getCreatedBy();
+        LocalDateTime lastUpdate = newAppointment.getLastUpdate();
+        String lastUpdatedBy = newAppointment.getLastUpdatedBy();
+        int customerID = newAppointment.getCustomerID();
+        int userID = newAppointment.getUserID();
+        int contactID = newAppointment.getContactID();
+
+        try {
+            String query =
+                    "INSERT INTO appointments\n" +
+                    "VALUES (value1, value2, value3, ...);";
+            statement.execute(query);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        allAppointments.add(newAppointment);
+    }
 
     public static void addCustomer(Customers newCustomer){ allCustomers.add(newCustomer); }
 
@@ -67,8 +109,20 @@ public class Tables {
         }
         return found;
     }
-
-    public static ObservableList<Appointments> getAllAppointments(){ return allAppointments; }
+//*******************CHANGE APPOINTMENT TIMES TO lOCAL TIMES****************
+    public static ObservableList<Appointments> getAllAppointments(){
+        /*
+        ObjectProperty<LocalDateTime> localStart = new SimpleObjectProperty<>();
+        LocalDate localDate = start.get().toLocalDate();
+        LocalTime localTime = start.get().toLocalTime();
+        LocalDateTime UTCDatetime = LocalDateTime.of(localDate, localTime);
+        ZonedDateTime UTCZonedDateTime = ZonedDateTime.of(UTCDatetime, ZoneId.of("UTC"));
+        ZonedDateTime localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), ZoneId.systemDefault());
+        LocalDateTime localDateTime = localZonedDateTime.toLocalDateTime();
+        localStart.set(localDateTime);
+         */
+        return allAppointments;
+    }
 
     public static ObservableList<Customers> getAllCustomers(){
         return allCustomers;

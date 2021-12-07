@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Appointments;
 import model.Customers;
@@ -157,6 +158,59 @@ public class editApptController implements Initializable {
 
     Stage stage;
     Parent scene;
+
+    @FXML
+    void editApptStartTimeClicked(MouseEvent mouseEvent) {
+        LocalTime selectedEndTime = editApptEndTime.getValue();
+        if(selectedEndTime == null) {
+            return;
+        }
+        LocalDateTime selectedEndDateTime;
+        if(selectedEndTime.equals(LocalTime.MIDNIGHT) || ((selectedEndTime.isAfter(LocalTime.MIDNIGHT)) && (selectedEndTime.isBefore(localStartTimes.get(0).minusHours(1)))))
+            selectedEndDateTime = LocalDateTime.of(LocalDate.now().plusDays(1),selectedEndTime);
+        else
+            selectedEndDateTime = LocalDateTime.of(LocalDate.now(),selectedEndTime);
+
+        editApptStartTime.getItems().clear();
+        for(LocalDateTime time : localStartDateTimes){
+            if(time.isBefore(selectedEndDateTime)) {
+                editApptStartTime.getItems().add(time.toLocalTime());
+            }
+            else
+                return;
+        }
+    }
+
+    @FXML
+    void editApptEndTimeClicked(MouseEvent mouseEvent) {
+        LocalTime selectedStartTime = editApptStartTime.getValue();
+        if(selectedStartTime == null) {
+            return;
+        }
+        LocalDateTime selectedStartDateTime;
+        if(selectedStartTime.equals(LocalTime.MIDNIGHT) || ((selectedStartTime.isAfter(LocalTime.MIDNIGHT)) && (selectedStartTime.isBefore(localStartTimes.get(0)))))
+            selectedStartDateTime = LocalDateTime.of(LocalDate.now().plusDays(1),selectedStartTime);
+        else
+            selectedStartDateTime = LocalDateTime.of(LocalDate.now(),selectedStartTime);
+
+        if(localEndDateTimes.get(0).isBefore(selectedStartDateTime.minusHours(1)))
+            return;
+        editApptEndTime.getItems().clear();
+        boolean timesMatch = false;
+        for(LocalDateTime time : localEndDateTimes){
+            if(selectedStartTime.equals(localStartTimes.get(0)))
+                timesMatch = true;
+            if(timesMatch) {
+                if (time.isAfter(selectedStartDateTime)) {
+                    editApptEndTime.getItems().add(time.toLocalTime());
+                } else
+                    return;
+            }
+            if(time.equals(selectedStartDateTime))
+                timesMatch = true;
+        }
+    }
+
 
     @FXML
     void editApptCancelButton(ActionEvent event) throws IOException {

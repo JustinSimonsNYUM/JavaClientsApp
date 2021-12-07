@@ -26,7 +26,6 @@ public class ZoneTimes {
         LocalDate myLD = LocalDate.now();
         LocalDateTime ESTDateTime;
         ZoneId ESTZoneID = ZoneId.of("US/Eastern");
-        ZoneId UTCZoneID = ZoneId.of("UTC");
         ZoneId localZoneID = ZoneId.systemDefault();
         ZonedDateTime ESTZonedDateTime;
 
@@ -35,8 +34,7 @@ public class ZoneTimes {
         for(int i = 0; i < 56 ; i++){
             ESTDateTime = LocalDateTime.of(myLD,ESTTimes);
             ESTZonedDateTime = ZonedDateTime.of(ESTDateTime,ESTZoneID);
-            ZonedDateTime UTCZonedDateTime = ZonedDateTime.ofInstant(ESTZonedDateTime.toInstant(), UTCZoneID);
-            ZonedDateTime localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), localZoneID);
+            ZonedDateTime localZonedDateTime = ZonedDateTime.ofInstant(ESTZonedDateTime.toInstant(), localZoneID);
             localdateStartTimes.add(localZonedDateTime.toLocalDateTime());
             localTime = localZonedDateTime.toLocalTime();
             localStartTimes.add(localTime);
@@ -52,7 +50,6 @@ public class ZoneTimes {
         LocalDate myLD = LocalDate.now();
         LocalDateTime ESTDateTime;
         ZoneId ESTZoneID = ZoneId.of("US/Eastern");
-        ZoneId UTCZoneID = ZoneId.of("UTC");
         ZoneId localZoneID = ZoneId.systemDefault();
         ZonedDateTime ESTZonedDateTime;
 
@@ -61,8 +58,7 @@ public class ZoneTimes {
         for(int i = 0; i < 56 ; i++){
             ESTDateTime = LocalDateTime.of(myLD,ESTTimes);
             ESTZonedDateTime = ZonedDateTime.of(ESTDateTime,ESTZoneID);
-            ZonedDateTime UTCZonedDateTime = ZonedDateTime.ofInstant(ESTZonedDateTime.toInstant(), UTCZoneID);
-            ZonedDateTime localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), localZoneID);
+            ZonedDateTime localZonedDateTime = ZonedDateTime.ofInstant(ESTZonedDateTime.toInstant(), localZoneID);
             localdateEndTimes.add(localZonedDateTime.toLocalDateTime());
 
             localTime = localZonedDateTime.toLocalTime();

@@ -136,34 +136,8 @@ public class mainPageController implements Initializable {
         CreateCustomerTable();
         SetDateTimeFormats();
     }
-
     private void CreateApptTable() {
         apptTable.setItems(apptList);
-        ObservableList<Appointments> UTCAppts = Tables.getAllAppointments();
-        ObservableList<Appointments> localAppts =FXCollections.observableArrayList();
-        ZoneId localZone = ZoneId.systemDefault();
-        ZoneId UTCZone = ZoneId.of("UTC");
-        ZonedDateTime UTCZonedDateTime;
-        ZonedDateTime localZonedDateTime;
-        for(Appointments appt : UTCAppts){
-            // get start
-            UTCZonedDateTime = ZonedDateTime.of(appt.getStart(), UTCZone);
-            localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), localZone);
-            LocalDateTime start = localZonedDateTime.toLocalDateTime();
-            //get end
-            UTCZonedDateTime = ZonedDateTime.of(appt.getEnd(), UTCZone);
-            localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), localZone);
-            LocalDateTime end = localZonedDateTime.toLocalDateTime();
-            //get createDate
-            UTCZonedDateTime = ZonedDateTime.of(appt.getCreateDate(), UTCZone);
-            localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), localZone);
-            LocalDateTime createDate = localZonedDateTime.toLocalDateTime();
-            //get lastUpdate
-            UTCZonedDateTime = ZonedDateTime.of(appt.getLastUpdate(), UTCZone);
-            localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), localZone);
-            LocalDateTime lastUpdate = localZonedDateTime.toLocalDateTime();
-
-        }
         apptList.setAll(Tables.getAllAppointments());
         apptTable.refresh();
     }
@@ -332,9 +306,6 @@ public class mainPageController implements Initializable {
             scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/addAppt.fxml")));
             stage.setScene(new Scene(scene, 600, 504));
             stage.show();
-            apptList.setAll(Tables.getAllAppointments());
-            apptTable.setItems(apptList);
-            apptTable.refresh();
         }
         catch(Exception e){
             myAlert(Alert.AlertType.ERROR,e.getMessage() + " closing program");
@@ -349,9 +320,6 @@ public class mainPageController implements Initializable {
             scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/addCustomer.fxml")));
             stage.setScene(new Scene(scene, 600, 354));
             stage.show();
-            customerList.setAll(Tables.getAllCustomers());
-            customerTable.setItems(customerList);
-            customerTable.refresh();
         }
         catch(Exception e){
             myAlert(Alert.AlertType.ERROR,e.getMessage() + " closing program");
@@ -407,9 +375,6 @@ public class mainPageController implements Initializable {
             scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/editAppt.fxml")));
             stage.setScene(new Scene(scene,600,504));
             stage.show();
-            apptList.setAll(Tables.getAllAppointments());
-            apptTable.setItems(apptList);
-            apptTable.refresh();
         }
         catch(Exception e){
             myAlert(Alert.AlertType.ERROR,e.getMessage() + " closing program");
@@ -428,9 +393,6 @@ public class mainPageController implements Initializable {
             scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/editCustomer.fxml")));
             stage.setScene(new Scene(scene, 600, 354));
             stage.show();
-            customerList.setAll(Tables.getAllCustomers());
-            customerTable.setItems(customerList);
-            customerTable.refresh();
         }
         catch(Exception e){
             myAlert(Alert.AlertType.ERROR,e.getMessage() + " closing program");

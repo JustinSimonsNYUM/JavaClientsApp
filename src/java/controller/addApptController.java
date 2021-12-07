@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.util.converter.LocalDateTimeStringConverter;
 import model.Appointments;
 import model.Customers;
 import model.Tables;
@@ -21,10 +22,7 @@ import model.ZoneTimes;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -184,7 +182,7 @@ public class addApptController implements Initializable {
         addNewApptEndTime.getItems().clear();
         boolean timesMatch = false;
         for(LocalDateTime time : localEndDateTimes){
-            if(selectedStartTime.equals(LocalTime.of(13, 0)))
+            if(selectedStartTime.equals(localStartTimes.get(0)))
                 timesMatch = true;
             if(timesMatch) {
                 if (time.isAfter(selectedStartDateTime)) {
@@ -225,30 +223,48 @@ public class addApptController implements Initializable {
             return;
         }
 
-
+//**************************************CHANGE THE TIMES FROM LOCAL TO UTC**********************
         //get the rest of the new appt data: createDate, createdBy, lastUpdate,LastUpdatedBY, contactID
         apptID++;
+        //change create date from local to UTC
         LocalDate createDateDate = LocalDate.now();
         LocalTime createDateTime = LocalTime.now();
-        LocalDateTime createDate = LocalDateTime.of(createDateDate,createDateTime).truncatedTo(ChronoUnit.MINUTES);
+        LocalDateTime localCreateDate = LocalDateTime.of(createDateDate,createDateTime).truncatedTo(ChronoUnit.MINUTES);
+        ZonedDateTime localCreateZonedDateTime = ZonedDateTime.of(localCreateDate, ZoneId.systemDefault());
+        ZonedDateTime UTCCreateZonedDateTime = ZonedDateTime.ofInstant(localCreateZonedDateTime.toInstant(), ZoneId.of("UTC"));
+        LocalDateTime UTCCreateDate = UTCCreateZonedDateTime.toLocalDateTime();
+
         String createdBy = "script";
+        //change last Update from local to UTC
         LocalDate lastUpdateDate = LocalDate.now();
         LocalTime lastUpdateTime = LocalTime.now();
-        LocalDateTime lastUpdate = LocalDateTime.of(lastUpdateDate,lastUpdateTime).truncatedTo(ChronoUnit.MINUTES);
-        String lastUpdatedBy = "script";
-        //set the startDateTimes
-        LocalDateTime startDateTime;
-        if(startTime.equals(LocalTime.MIDNIGHT) || startTime.isAfter(LocalTime.MIDNIGHT) && (startTime.isBefore(localStartTimes.get(0))))
-            startDateTime = LocalDateTime.of(date.plusDays(1),startTime);
-        else
-            startDateTime = LocalDateTime.of(date,startTime);
+        LocalDateTime localLastUpdate = LocalDateTime.of(lastUpdateDate,lastUpdateTime).truncatedTo(ChronoUnit.MINUTES);
+        ZonedDateTime localLastUpdateZoned = ZonedDateTime.of(localLastUpdate, ZoneId.systemDefault());
+        ZonedDateTime UTCLastUpdateZonedDateTime = ZonedDateTime.ofInstant(localLastUpdateZoned.toInstant(), ZoneId.of("UTC"));
+        LocalDateTime UTCLastUpdate = UTCLastUpdateZonedDateTime.toLocalDateTime();
 
-        //set the endDateTimes
-        LocalDateTime endDateTime;
-        if(endTime.equals(LocalTime.MIDNIGHT) || endTime.isAfter(LocalTime.MIDNIGHT) && (endTime.isBefore(localStartTimes.get(0))))
-            endDateTime = LocalDateTime.of(date.plusDays(1),endTime);
+        // set lastupdatedby to script
+        String lastUpdatedBy = "script";
+
+        //set the startDateTimes and change to UTC
+        LocalDateTime localStartDateTime;
+        if(startTime.equals(LocalTime.MIDNIGHT) || startTime.isAfter(LocalTime.MIDNIGHT) && (startTime.isBefore(localStartTimes.get(0))))
+            localStartDateTime = LocalDateTime.of(date.plusDays(1),startTime);
         else
-            endDateTime = LocalDateTime.of(date,endTime);
+            localStartDateTime = LocalDateTime.of(date,startTime);
+        ZonedDateTime localStartZoned = ZonedDateTime.of(localStartDateTime, ZoneId.systemDefault());
+        ZonedDateTime UTCStartZonedDateTime = ZonedDateTime.ofInstant(localStartZoned.toInstant(), ZoneId.of("UTC"));
+        LocalDateTime UTCStartDateTime =  UTCStartZonedDateTime.toLocalDateTime();
+
+        //set the endDateTimes and change to UTC
+        LocalDateTime localEndDateTime;
+        if(endTime.equals(LocalTime.MIDNIGHT) || endTime.isAfter(LocalTime.MIDNIGHT) && (endTime.isBefore(localStartTimes.get(0))))
+            localEndDateTime = LocalDateTime.of(date.plusDays(1),endTime);
+        else
+            localEndDateTime = LocalDateTime.of(date,endTime);
+        ZonedDateTime localEndZoned = ZonedDateTime.of(localEndDateTime, ZoneId.systemDefault());
+        ZonedDateTime UTCEndZonedDateTime = ZonedDateTime.ofInstant(localEndZoned.toInstant(), ZoneId.of("UTC"));
+        LocalDateTime UTCEndDateTime =  UTCEndZonedDateTime.toLocalDateTime();
 
         int contactID = 0;
 
@@ -269,7 +285,7 @@ public class addApptController implements Initializable {
             System.out.println(e.getMessage());
         }
 
-        Tables.addAppointment(new Appointments(apptID, title, description, location, type, startDateTime, endDateTime, createDate, createdBy, lastUpdate, lastUpdatedBy, customerID, userID, contactID));
+        Tables.addNewAppointment(new Appointments(apptID, title, description, location, type, UTCStartDateTime, UTCEndDateTime, UTCCreateDate, createdBy, UTCLastUpdate, lastUpdatedBy, customerID, userID, contactID));
 
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/mainPage.fxml")));
