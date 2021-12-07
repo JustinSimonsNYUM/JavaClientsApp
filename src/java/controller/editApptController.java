@@ -26,6 +26,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -166,10 +167,85 @@ public class editApptController implements Initializable {
     }
 
     @FXML
-    void editApptSubmitButton(ActionEvent event) throws IOException {
+    void editApptSubmitButton(ActionEvent event) throws IOException, SQLException {
+        int apptID = Tables.getModifyAppt().getId();
+        Integer userID = editApptUserID.getValue();
+        Integer customerID = editApptCustomerID.getValue();
+        String title = editApptTitle.getText().trim();
+        String description = editApptDescription.getText().trim();
+        String location = editApptLocation.getText().trim();
+        String selectedContactName = editApptContact.getValue();
+        String type = editApptType.getValue();
+        LocalDate date = editApptDate.getValue();
+        LocalTime startTime = editApptStartTime.getValue();
+        LocalTime endTime = editApptEndTime.getValue();
+
+        //make sure each field is filled in
+        if((userID == null) || (customerID == null) || (title.isEmpty()) || (description.isEmpty()) || (location.isEmpty()) || (selectedContactName == null) || (type == null) || (date == null) || (startTime == null) || (endTime == null) )  {
+            myAlert("Please fill out each field.");
+            return;
+        }
+
+
+        //get the rest of the updated appt data: createDate, createdBy, lastUpdate,LastUpdatedBY, contactIDf
+        LocalDateTime createDate = Tables.getModifyAppt().getCreateDate();
+        String createdBy = "script";
+        LocalDate lastUpdateDate = LocalDate.now();
+        LocalTime lastUpdateTime = LocalTime.now();
+        LocalDateTime lastUpdate = LocalDateTime.of(lastUpdateDate,lastUpdateTime).truncatedTo(ChronoUnit.MINUTES);
+        String lastUpdatedBy = "script";
+        //set the startDateTimes
+        LocalDateTime startDateTime;
+        if(startTime.equals(LocalTime.MIDNIGHT) || startTime.isAfter(LocalTime.MIDNIGHT) && (startTime.isBefore(localStartTimes.get(0))))
+            startDateTime = LocalDateTime.of(date.plusDays(1),startTime);
+        else
+            startDateTime = LocalDateTime.of(date,startTime);
+
+        //set the endDateTimes
+        LocalDateTime endDateTime;
+        if(endTime.equals(LocalTime.MIDNIGHT) || endTime.isAfter(LocalTime.MIDNIGHT) && (endTime.isBefore(localStartTimes.get(0))))
+            endDateTime = LocalDateTime.of(date.plusDays(1),endTime);
+        else
+            endDateTime = LocalDateTime.of(date,endTime);
+
+        int contactID = 0;
+
+        //get the proper division ID
+        Connection connect = JDBC.getConnection();
+        DBQuery.setStatement(connect);
+        Statement statement = DBQuery.getStatement();
+        try{
+            String query = "SELECT * from contacts";
+            statement.execute(query);
+            ResultSet rs = statement.getResultSet();
+            while(rs.next()){
+                String nextContactName = rs.getString("Contact_Name");
+                if(nextContactName.equals(selectedContactName))
+                    contactID = rs.getInt("Contact_ID");
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        int apptIndex = 0;
+        ObservableList<Appointments> appt = Tables.getAllAppointments();
+        for(int i = 0; i < appt.size(); i++){
+            if(appt.get(i).getId() == Tables.getModifyAppt().getId()){
+                apptIndex = i;
+                break;
+            }
+        }
+
+        Tables.updateAppt(apptIndex, (new Appointments(apptID, title, description, location, type, startDateTime, endDateTime, createDate, createdBy, lastUpdate, lastUpdatedBy, customerID, userID, contactID)));
+
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/mainPage.fxml")));
         stage.setScene(new Scene(scene,1235,558));
         stage.show();
+    }
+    private void myAlert(String alert){
+        Alert a = new Alert(Alert.AlertType.ERROR);
+        a.setContentText(alert);
+        a.show();
     }
 }

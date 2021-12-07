@@ -3,7 +3,7 @@ package model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.Time;
+
 import java.time.*;
 
 public class ZoneTimes {
@@ -73,32 +73,3 @@ public class ZoneTimes {
         return localEndTimes;
     }
 }
-/*
-        System.out.println(ZoneId.systemDefault());
-        ZoneId.getAvailableZoneIds().stream().sorted().forEach(System.out::println);
-        ZoneId.getAvailableZoneIds().stream().filter(z->z.contains("America")).sorted().forEach(System.out::println);
-
-
-        LocalTime myLT = LocalTime.of(22,0);
-        LocalDate myLD = LocalDate.now();
-        LocalDateTime myLDT = LocalDateTime.of(myLD,myLT);
-        ZoneId myZoneID = ZoneId.of("America/New_York");
-        ZonedDateTime myZDT = ZonedDateTime.of(myLDT,myZoneID);
-
-
-        ZoneId utcZID = ZoneId.of("UTC");
-        ZonedDateTime utcZDT = ZonedDateTime.ofInstant(myZDT.toInstant(), utcZID);
-        System.out.println("User time to UTC:" + utcZDT);
-
-        ZonedDateTime myNewZDT = ZonedDateTime.ofInstant(utcZDT.toInstant(), myZoneID);
-        System.out.println("UTC to User Time: " + myNewZDT);
-
-        System.out.println(myZDT);
-        System.out.println(myZDT.toLocalDate());
-        System.out.println(myZDT.toLocalDateTime());
-        System.out.println(myZDT.toOffsetDateTime());
-        System.out.println(myZDT.toInstant());
-        System.out.println(myZDT.toLocalDate().toString() + " " + myZDT.toLocalTime().toString());
-
-
-*/

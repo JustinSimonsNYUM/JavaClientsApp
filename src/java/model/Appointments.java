@@ -5,7 +5,8 @@ package model;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
-import java.time.LocalDateTime;
+
+import java.time.*;
 
 public class Appointments {
 
@@ -40,21 +41,53 @@ public class Appointments {
         this.userID = userID;
         this.contactID = contactID;
     }
-    public ObservableValue<LocalDateTime> startProperty() { return start; }
-
-    public LocalDateTime getStart() { return start.get(); }
+    public ObservableValue<LocalDateTime> startProperty() {
+        return start;
+    }
+//**************************MAKE SUER THAT EVERY CHANGE IS SENDING THE INFOMATION IN UTC TIME.******************
+    public LocalDateTime getStart() {
+        ObjectProperty<LocalDateTime> localStart = new SimpleObjectProperty<>();
+        LocalDate localDate = start.get().toLocalDate();
+        LocalTime localTime = start.get().toLocalTime();
+        LocalDateTime UTCDatetime = LocalDateTime.of(localDate, localTime);
+        ZonedDateTime UTCZonedDateTime = ZonedDateTime.of(UTCDatetime, ZoneId.of("UTC"));
+        ZonedDateTime localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), ZoneId.systemDefault());
+        LocalDateTime localDateTime = localZonedDateTime.toLocalDateTime();
+        localStart.set(localDateTime);
+        return localStart.get();
+    }
 
     public void setStart(LocalDateTime start) { this.start.set(start); }
 
     public ObservableValue<LocalDateTime> endProperty() { return end; }
 
-    public LocalDateTime getEnd() { return end.get(); }
+    public LocalDateTime getEnd() {
+        ObjectProperty<LocalDateTime> localEnd = new SimpleObjectProperty<>();
+        LocalDate localDate = end.get().toLocalDate();
+        LocalTime localTime = end.get().toLocalTime();
+        LocalDateTime UTCDatetime = LocalDateTime.of(localDate, localTime);
+        ZonedDateTime UTCZonedDateTime = ZonedDateTime.of(UTCDatetime, ZoneId.of("UTC"));
+        ZonedDateTime localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), ZoneId.systemDefault());
+        LocalDateTime localDateTime = localZonedDateTime.toLocalDateTime();
+        localEnd.set(localDateTime);
+        return localEnd.get();
+    }
 
     public void setEnd(LocalDateTime end) { this.end.set(end); }
 
     public ObjectProperty<LocalDateTime> createDateProperty() { return createDate; }
 
-    public LocalDateTime getCreateDate() { return createDate.get(); }
+    public LocalDateTime getCreateDate() {
+        ObjectProperty<LocalDateTime> localCreateDate = new SimpleObjectProperty<>();
+        LocalDate localDate = createDate.get().toLocalDate();
+        LocalTime localTime = createDate.get().toLocalTime();
+        LocalDateTime UTCDatetime = LocalDateTime.of(localDate, localTime);
+        ZonedDateTime UTCZonedDateTime = ZonedDateTime.of(UTCDatetime, ZoneId.of("UTC"));
+        ZonedDateTime localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), ZoneId.systemDefault());
+        LocalDateTime localDateTime = localZonedDateTime.toLocalDateTime();
+        localCreateDate.set(localDateTime);
+        return localCreateDate.get();
+    }
 
     public void setCreateDate(LocalDateTime createDate) { this.createDate.set(createDate); }
 
@@ -105,7 +138,15 @@ public class Appointments {
     public ObservableValue<LocalDateTime> lastUpdateProperty() { return lastUpdate; }
 
     public LocalDateTime getLastUpdate() {
-        return lastUpdate.get();
+        ObjectProperty<LocalDateTime> localLastUpdate = new SimpleObjectProperty<>();
+        LocalDate localDate = lastUpdate.get().toLocalDate();
+        LocalTime localTime = lastUpdate.get().toLocalTime();
+        LocalDateTime UTCDatetime = LocalDateTime.of(localDate, localTime);
+        ZonedDateTime UTCZonedDateTime = ZonedDateTime.of(UTCDatetime, ZoneId.of("UTC"));
+        ZonedDateTime localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), ZoneId.systemDefault());
+        LocalDateTime localDateTime = localZonedDateTime.toLocalDateTime();
+        localLastUpdate.set(localDateTime);
+        return localLastUpdate.get();
     }
 
     public void setLastUpdate(LocalDateTime lastUpdate) {

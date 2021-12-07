@@ -184,6 +184,8 @@ public class addApptController implements Initializable {
         addNewApptEndTime.getItems().clear();
         boolean timesMatch = false;
         for(LocalDateTime time : localEndDateTimes){
+            if(selectedStartTime.equals(LocalTime.of(13, 0)))
+                timesMatch = true;
             if(timesMatch) {
                 if (time.isAfter(selectedStartDateTime)) {
                     addNewApptEndTime.getItems().add(time.toLocalTime());
@@ -236,14 +238,14 @@ public class addApptController implements Initializable {
         String lastUpdatedBy = "script";
         //set the startDateTimes
         LocalDateTime startDateTime;
-        if(startTime.equals(LocalTime.MIDNIGHT) || startTime.isAfter(LocalTime.MIDNIGHT))
+        if(startTime.equals(LocalTime.MIDNIGHT) || startTime.isAfter(LocalTime.MIDNIGHT) && (startTime.isBefore(localStartTimes.get(0))))
             startDateTime = LocalDateTime.of(date.plusDays(1),startTime);
         else
             startDateTime = LocalDateTime.of(date,startTime);
 
         //set the endDateTimes
         LocalDateTime endDateTime;
-        if(endTime.equals(LocalTime.MIDNIGHT) || endTime.isAfter(LocalTime.MIDNIGHT))
+        if(endTime.equals(LocalTime.MIDNIGHT) || endTime.isAfter(LocalTime.MIDNIGHT) && (endTime.isBefore(localStartTimes.get(0))))
             endDateTime = LocalDateTime.of(date.plusDays(1),endTime);
         else
             endDateTime = LocalDateTime.of(date,endTime);

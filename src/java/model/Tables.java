@@ -20,6 +20,13 @@ public class Tables {
 
     public static Appointments getModifyAppt(){ return modifyAppt; }
 
+    public static void updateAppt(int index, Appointments selectedAppt){
+        for(Appointments appt: allAppointments){
+            if(appt.getId() == selectedAppt.getId())
+                allAppointments.set(index, selectedAppt);
+        }
+    }
+
     public static void setModifyCustomer(Customers customer){
         modifyCustomer = new Customers(customer.getId(),customer.getName(),customer.getAddress(),customer.getPostalCode(),customer.getPhone(),customer.getCreateDate(),customer.getCreatedBy(),customer.getLastUpdate(),customer.getLastUpdatedBy(),customer.getDivisionID());
     }

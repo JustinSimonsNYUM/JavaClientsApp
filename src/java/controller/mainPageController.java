@@ -18,8 +18,7 @@ import model.Tables;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
@@ -140,6 +139,31 @@ public class mainPageController implements Initializable {
 
     private void CreateApptTable() {
         apptTable.setItems(apptList);
+        ObservableList<Appointments> UTCAppts = Tables.getAllAppointments();
+        ObservableList<Appointments> localAppts =FXCollections.observableArrayList();
+        ZoneId localZone = ZoneId.systemDefault();
+        ZoneId UTCZone = ZoneId.of("UTC");
+        ZonedDateTime UTCZonedDateTime;
+        ZonedDateTime localZonedDateTime;
+        for(Appointments appt : UTCAppts){
+            // get start
+            UTCZonedDateTime = ZonedDateTime.of(appt.getStart(), UTCZone);
+            localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), localZone);
+            LocalDateTime start = localZonedDateTime.toLocalDateTime();
+            //get end
+            UTCZonedDateTime = ZonedDateTime.of(appt.getEnd(), UTCZone);
+            localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), localZone);
+            LocalDateTime end = localZonedDateTime.toLocalDateTime();
+            //get createDate
+            UTCZonedDateTime = ZonedDateTime.of(appt.getCreateDate(), UTCZone);
+            localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), localZone);
+            LocalDateTime createDate = localZonedDateTime.toLocalDateTime();
+            //get lastUpdate
+            UTCZonedDateTime = ZonedDateTime.of(appt.getLastUpdate(), UTCZone);
+            localZonedDateTime = ZonedDateTime.ofInstant(UTCZonedDateTime.toInstant(), localZone);
+            LocalDateTime lastUpdate = localZonedDateTime.toLocalDateTime();
+
+        }
         apptList.setAll(Tables.getAllAppointments());
         apptTable.refresh();
     }
@@ -237,16 +261,68 @@ public class mainPageController implements Initializable {
 
     @FXML
     void apptAllRadio(ActionEvent event) {
-
+        CreateApptTable();
     }
     @FXML
     void apptMonthRadio(ActionEvent event) {
+        ObservableList<Appointments> monthAppts = FXCollections.observableArrayList();
+        LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
+        LocalDate lastDayOfMonth = LocalDate.now().withDayOfMonth(LocalDate.EPOCH.lengthOfMonth());
 
+        LocalDate nextAppt;
+        for(Appointments appt : apptList){
+            nextAppt = appt.getStart().toLocalDate();
+            if((nextAppt.isAfter(firstDayOfMonth) || nextAppt.equals(firstDayOfMonth)) && (nextAppt.isBefore(lastDayOfMonth) || nextAppt.equals(lastDayOfMonth))){
+                monthAppts.add(appt);
+            }
+        }
+        apptTable.setItems(monthAppts);
+        apptList.setAll(Tables.getAllAppointments());
+        apptTable.refresh();
     }
 
     @FXML
     void apptWeekRadio(ActionEvent event) {
+        ObservableList<Appointments> weekAppts = FXCollections.observableArrayList();
+        DayOfWeek today = LocalDate.now().getDayOfWeek();
+        int subtractDays = 0;
+        int addDays = 0;
+        switch (today) {
+            case MONDAY -> {
+                subtractDays = 1;
+                addDays = 5;
+            }
+            case TUESDAY -> {
+                subtractDays = 2;
+                addDays = 4;
+            }
+            case WEDNESDAY -> {
+                subtractDays = 3;
+                addDays = 3;
+            }
+            case THURSDAY -> {
+                subtractDays = 4;
+                addDays = 2;
+            }
+            case FRIDAY -> {
+                subtractDays = 5;
+                addDays = 1;
+            }
+        }
 
+        LocalDate firstDayOfWeek = LocalDate.now().minusDays(subtractDays);
+        LocalDate lastDayOfWeek = LocalDate.now().plusDays(addDays);
+
+        LocalDate nextAppt;
+        for(Appointments appt : apptList){
+            nextAppt = appt.getStart().toLocalDate();
+            if(nextAppt.isAfter(firstDayOfWeek) && nextAppt.isBefore(lastDayOfWeek)){
+                weekAppts.add(appt);
+            }
+        }
+        apptTable.setItems(weekAppts);
+        apptList.setAll(Tables.getAllAppointments());
+        apptTable.refresh();
     }
 
     @FXML
@@ -261,7 +337,7 @@ public class mainPageController implements Initializable {
             apptTable.refresh();
         }
         catch(Exception e){
-            myAlert(e.getMessage() + " closing program");
+            myAlert(Alert.AlertType.ERROR,e.getMessage() + " closing program");
             System.exit(0);
         }
     }
@@ -278,7 +354,7 @@ public class mainPageController implements Initializable {
             customerTable.refresh();
         }
         catch(Exception e){
-            myAlert(e.getMessage() + " closing program");
+            myAlert(Alert.AlertType.ERROR,e.getMessage() + " closing program");
             System.exit(0);
         }
     }
@@ -287,7 +363,7 @@ public class mainPageController implements Initializable {
     void deleteApptButtonAction(ActionEvent event) {
         Appointments selectedAppt = apptTable.getSelectionModel().getSelectedItem();
         if(selectedAppt == null){
-            myAlert("Either no appointment was found in database or no customer is selected.");
+            myAlert(Alert.AlertType.ERROR,"Either no appointment was found in database or no customer is selected.");
             return;
         }
 
@@ -296,7 +372,7 @@ public class mainPageController implements Initializable {
             apptList.setAll(Tables.getAllAppointments());
             apptTable.setItems(apptList);
             apptTable.refresh();
-            myAlert("The appointment with ID: " + selectedAppt.getId() + ", and title: " + selectedAppt.getTitle() + ", has been deleted.");
+            myAlert(Alert.AlertType.INFORMATION,"The appointment with ID: " + selectedAppt.getId() + ", and title: " + selectedAppt.getTitle() + ", has been deleted.");
         }
 
     }
@@ -305,7 +381,7 @@ public class mainPageController implements Initializable {
     void deleteCustomerButtonAction(ActionEvent event) {
         Customers selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
         if(selectedCustomer == null) {
-            myAlert("Either no customer was found in database or no customer is selected.");
+            myAlert(Alert.AlertType.ERROR,"Either no customer was found in database or no customer is selected.");
             return;
         }
         boolean customerBool = Tables.deleteCustomer(selectedCustomer);
@@ -316,7 +392,7 @@ public class mainPageController implements Initializable {
             apptList.setAll(Tables.getAllAppointments());
             apptTable.setItems(apptList);
             apptTable.refresh();
-            myAlert(selectedCustomer.getName() + "has been deleted along with their appointments.");
+            myAlert(Alert.AlertType.CONFIRMATION,selectedCustomer.getName() + "has been deleted along with their appointments.");
         }
     }
 
@@ -336,7 +412,7 @@ public class mainPageController implements Initializable {
             apptTable.refresh();
         }
         catch(Exception e){
-            myAlert(e.getMessage() + " closing program");
+            myAlert(Alert.AlertType.ERROR,e.getMessage() + " closing program");
             System.exit(0);
         }
     }
@@ -357,7 +433,7 @@ public class mainPageController implements Initializable {
             customerTable.refresh();
         }
         catch(Exception e){
-            myAlert(e.getMessage() + " closing program");
+            myAlert(Alert.AlertType.ERROR,e.getMessage() + " closing program");
             System.exit(0);
         }
     }
@@ -375,8 +451,8 @@ public class mainPageController implements Initializable {
         stage.close();
     }
 
-    public void myAlert(String alert){
-        Alert a = new Alert(Alert.AlertType.ERROR);
+    public void myAlert(Alert.AlertType alertType, String alert){
+        Alert a = new Alert(alertType);
         a.setContentText(alert);
         a.showAndWait();
     }

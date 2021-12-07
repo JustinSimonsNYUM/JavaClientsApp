@@ -9,15 +9,11 @@ import javafx.stage.Stage;
 import model.Appointments;
 import model.Customers;
 import model.Tables;
-import model.ZoneTimes;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-
 
 public class Main extends Application {
 
@@ -27,7 +23,7 @@ public class Main extends Application {
         try{
             //*******************************CHANGE BACK TO logIn.FXML WHEN DONE*******************************
            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainPage.fxml"));
-           Scene scene = new Scene(fxmlLoader.load(), 1235, 558);
+           Scene scene = new Scene(fxmlLoader.load(), 1240, 558);
            //Scene scene = new Scene(fxmlLoader.load(), 400, 200);
            stage.setScene(scene);
            stage.setResizable(false);
@@ -50,10 +46,6 @@ public class Main extends Application {
 
     void fillTables() throws SQLException {
 
-        //String LDT = LocalDateTime.of(LocalDate.now(),LocalTime.now()).format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm"));
-       // System.out.println(LDT);
-        //LocalDate localDate= LDT.;
-
         Connection connect = JDBC.getConnection();
         DBQuery.setStatement(connect);
         Statement statement = DBQuery.getStatement();
@@ -62,7 +54,6 @@ public class Main extends Application {
             String query = "SELECT * from appointments";
             statement.execute(query);
             ResultSet rs = statement.getResultSet();
-            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             while(rs.next()){
                 int apptID = rs.getInt("Appointment_ID");
                 String title = rs.getString("Title");
@@ -80,7 +71,6 @@ public class Main extends Application {
                 LocalDateTime createDate = LocalDateTime.of(createDateDate,createDateTime).truncatedTo(ChronoUnit.MINUTES);
                 String createdBy = rs.getString("Created_By");
                 LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime().truncatedTo(ChronoUnit.MINUTES);
-                lastUpdate.format(dateFormat);
                 String lastUpdatedBy = rs.getString("Last_Updated_By");
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
