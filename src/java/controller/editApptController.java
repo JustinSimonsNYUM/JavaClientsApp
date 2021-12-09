@@ -23,10 +23,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -165,35 +162,22 @@ public class editApptController implements Initializable {
         if(selectedEndTime == null) {
             return;
         }
-        LocalDateTime selectedEndDateTime;
-        if(selectedEndTime.equals(LocalTime.MIDNIGHT) || ((selectedEndTime.isAfter(LocalTime.MIDNIGHT)) && (selectedEndTime.isBefore(localStartTimes.get(0).minusHours(1)))))
-            selectedEndDateTime = LocalDateTime.of(LocalDate.now().plusDays(1),selectedEndTime);
-        else
-            selectedEndDateTime = LocalDateTime.of(LocalDate.now(),selectedEndTime);
-
-        editApptStartTime.getItems().clear();
-        for(LocalDateTime time : localStartDateTimes){
-            if(time.isBefore(selectedEndDateTime)) {
-                editApptStartTime.getItems().add(time.toLocalTime());
-            }
-            else
-                return;
-        }
+        editApptEndTime.getSelectionModel().clearSelection();
     }
 
     @FXML
     void editApptEndTimeClicked(MouseEvent mouseEvent) {
         LocalTime selectedStartTime = editApptStartTime.getValue();
-        if(selectedStartTime == null) {
+        if(selectedStartTime == null)
             return;
-        }
+
         LocalDateTime selectedStartDateTime;
         if(selectedStartTime.equals(LocalTime.MIDNIGHT) || ((selectedStartTime.isAfter(LocalTime.MIDNIGHT)) && (selectedStartTime.isBefore(localStartTimes.get(0)))))
             selectedStartDateTime = LocalDateTime.of(LocalDate.now().plusDays(1),selectedStartTime);
         else
             selectedStartDateTime = LocalDateTime.of(LocalDate.now(),selectedStartTime);
 
-        if(localEndDateTimes.get(0).isBefore(selectedStartDateTime.minusHours(1)))
+        if(localEndDateTimes.get(0).toLocalTime().minusMinutes(15).equals(selectedStartTime.plusHours(1)))
             return;
         editApptEndTime.getItems().clear();
         boolean timesMatch = false;
@@ -239,28 +223,46 @@ public class editApptController implements Initializable {
             myAlert("Please fill out each field.");
             return;
         }
-
+        boolean outOfBusinessHours = false;
+        if(startTime.isAfter(localStartTimes.get(0).minusMinutes(1)) && (endTime.isBefore(localEndTimes.get(localEndTimes.size()-1).plusMinutes(1)))){
+            outOfBusinessHours = true;
+        }
+        if(outOfBusinessHours){
+            myAlert("The start or end time is not within the buisness hours of "+ localStartTimes.get(0) + " and " + localEndTimes.get(localEndTimes.size()-1));
+            return;
+        }
 
         //get the rest of the updated appt data: createDate, createdBy, lastUpdate,LastUpdatedBY, contactIDf
-        LocalDateTime createDate = Tables.getModifyAppt().getCreateDate();
+        LocalDateTime localCreateDate = Tables.getModifyAppt().getCreateDate();
+        ZonedDateTime localZonedDateTime = ZonedDateTime.of(localCreateDate, ZoneId.systemDefault());
+        ZonedDateTime UTCZonedDateTime = ZonedDateTime.ofInstant(localZonedDateTime.toInstant(), ZoneId.of("UTC"));
+        LocalDateTime UTCCreateDate = UTCZonedDateTime.toLocalDateTime();
         String createdBy = "script";
         LocalDate lastUpdateDate = LocalDate.now();
         LocalTime lastUpdateTime = LocalTime.now();
-        LocalDateTime lastUpdate = LocalDateTime.of(lastUpdateDate,lastUpdateTime).truncatedTo(ChronoUnit.MINUTES);
+        LocalDateTime localLastUpdate = LocalDateTime.of(lastUpdateDate,lastUpdateTime).truncatedTo(ChronoUnit.MINUTES);
+        localZonedDateTime = ZonedDateTime.of(localLastUpdate, ZoneId.systemDefault());
+        UTCZonedDateTime = ZonedDateTime.ofInstant(localZonedDateTime.toInstant(), ZoneId.of("UTC"));
+        LocalDateTime UTCLastUpdate = UTCZonedDateTime.toLocalDateTime();
         String lastUpdatedBy = "script";
         //set the startDateTimes
-        LocalDateTime startDateTime;
+        LocalDateTime localStartDateTime;
         if(startTime.equals(LocalTime.MIDNIGHT) || startTime.isAfter(LocalTime.MIDNIGHT) && (startTime.isBefore(localStartTimes.get(0))))
-            startDateTime = LocalDateTime.of(date.plusDays(1),startTime);
+            localStartDateTime = LocalDateTime.of(date.plusDays(1),startTime);
         else
-            startDateTime = LocalDateTime.of(date,startTime);
-
+            localStartDateTime = LocalDateTime.of(date,startTime);
+        localZonedDateTime = ZonedDateTime.of(localStartDateTime, ZoneId.systemDefault());
+        UTCZonedDateTime = ZonedDateTime.ofInstant(localZonedDateTime.toInstant(), ZoneId.of("UTC"));
+        LocalDateTime UTCStartDateTime = UTCZonedDateTime.toLocalDateTime();
         //set the endDateTimes
-        LocalDateTime endDateTime;
+        LocalDateTime localEndDateTime;
         if(endTime.equals(LocalTime.MIDNIGHT) || endTime.isAfter(LocalTime.MIDNIGHT) && (endTime.isBefore(localStartTimes.get(0))))
-            endDateTime = LocalDateTime.of(date.plusDays(1),endTime);
+            localEndDateTime = LocalDateTime.of(date.plusDays(1),endTime);
         else
-            endDateTime = LocalDateTime.of(date,endTime);
+            localEndDateTime = LocalDateTime.of(date,endTime);
+        localZonedDateTime = ZonedDateTime.of(localEndDateTime, ZoneId.systemDefault());
+        UTCZonedDateTime = ZonedDateTime.ofInstant(localZonedDateTime.toInstant(), ZoneId.of("UTC"));
+        LocalDateTime UTCEndDateTime = UTCZonedDateTime.toLocalDateTime();
 
         int contactID = 0;
 
@@ -290,7 +292,7 @@ public class editApptController implements Initializable {
             }
         }
 
-        Tables.updateAppt(apptIndex, (new Appointments(apptID, title, description, location, type, startDateTime, endDateTime, createDate, createdBy, lastUpdate, lastUpdatedBy, customerID, userID, contactID)));
+        Tables.updateAppt(apptIndex, (new Appointments(apptID, title, description, location, type, UTCStartDateTime, UTCEndDateTime, UTCCreateDate, createdBy, UTCLastUpdate, lastUpdatedBy, customerID, userID, contactID)));
 
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/mainPage.fxml")));

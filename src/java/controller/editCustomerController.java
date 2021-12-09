@@ -24,9 +24,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -151,62 +149,6 @@ public class editCustomerController implements Initializable {
         stage.show();
     }
 
-    @FXML
-    void editCustomerSubmitButton(ActionEvent event) throws IOException, SQLException {
-        int id = Integer.parseInt(editCustomerID.getText());
-        String name = editCustomerName.getText().trim();
-        String address = editCustomerAddress.getText().trim();
-        String postal = editCustomerPostal.getText().trim();
-        String selectedCountry = editCustomerCountry.getValue();
-        String selectedDivision = editCustomerDivision.getValue();
-        String phone = editCustomerPhone.getText().trim();
-        LocalDateTime createDate = Tables.getModifyCustomer().getCreateDate();
-        String createdBy = "script";
-        LocalDate lastUpdateDate = LocalDate.now();
-        LocalTime lastUpdateTime = LocalTime.now();
-        LocalDateTime lastUpdate = LocalDateTime.of(lastUpdateDate,lastUpdateTime).truncatedTo(ChronoUnit.MINUTES);
-        String lastUpdatedBy = "script";
-        int newDivision = 0;
-
-        //get the proper division ID
-        Connection connect = JDBC.getConnection();
-        DBQuery.setStatement(connect);
-        Statement statement = DBQuery.getStatement();
-        try{
-            String query = "SELECT * from first_level_divisions";
-            statement.execute(query);
-            ResultSet rs = statement.getResultSet();
-            while(rs.next()){
-                String oldDivision = rs.getString("Division");
-                if(oldDivision.equals(selectedDivision))
-                    newDivision = rs.getInt("Division_ID");
-            }
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-
-        if( (selectedCountry == null) || (selectedDivision == null) || name.isEmpty() || address.isEmpty() || postal.isEmpty() || phone.isEmpty()){
-            myAlert("Please fill out each field.");
-            return;
-        }
-
-        int customerIndex = 0;
-        ObservableList<Customers> customers = Tables.getAllCustomers();
-        for(int i = 0; i < customers.size(); i++){
-            if(customers.get(i).getId() == Tables.getModifyCustomer().getId()){
-                customerIndex = i;
-                break;
-            }
-        }
-
-        Tables.updateCustomer(customerIndex, (new Customers(id,name,address,postal,phone,createDate,createdBy,lastUpdate,lastUpdatedBy,newDivision)));
-
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/mainPage.fxml")));
-        stage.setScene(new Scene(scene,1235,558));
-        stage.show();
-    }
-
     public void editCustomerDivisionClicked(MouseEvent mouseEvent) throws SQLException {
         String selectedCountry = editCustomerCountry.getValue();
         if(selectedCountry == null) {
@@ -244,6 +186,73 @@ public class editCustomerController implements Initializable {
             System.out.println(e.getMessage());
         }
     }
+
+    @FXML
+    void editCustomerSubmitButton(ActionEvent event) throws IOException, SQLException {
+        int id = Integer.parseInt(editCustomerID.getText());
+        String name = editCustomerName.getText().trim();
+        String address = editCustomerAddress.getText().trim();
+        String postal = editCustomerPostal.getText().trim();
+        String selectedCountry = editCustomerCountry.getValue();
+        String selectedDivision = editCustomerDivision.getValue();
+        String phone = editCustomerPhone.getText().trim();
+        // change create date from local to UTC
+        LocalDateTime localCreateDate = Tables.getModifyCustomer().getCreateDate();
+        ZonedDateTime localZonedDateTime = ZonedDateTime.of(localCreateDate, ZoneId.systemDefault());
+        ZonedDateTime UTCZonedDateTime = ZonedDateTime.ofInstant(localZonedDateTime.toInstant(), ZoneId.of("UTC"));
+        LocalDateTime UTCCreateDate = UTCZonedDateTime.toLocalDateTime();
+
+        String createdBy = "script";
+        // change last update from local to UTC
+        LocalDate lastUpdateDate = LocalDate.now();
+        LocalTime lastUpdateTime = LocalTime.now();
+        LocalDateTime localLastUpdate = LocalDateTime.of(lastUpdateDate,lastUpdateTime).truncatedTo(ChronoUnit.MINUTES);
+        localZonedDateTime = ZonedDateTime.of(localLastUpdate, ZoneId.systemDefault());
+        UTCZonedDateTime = ZonedDateTime.ofInstant(localZonedDateTime.toInstant(), ZoneId.of("UTC"));
+        LocalDateTime UTCLastUpdate = UTCZonedDateTime.toLocalDateTime();
+        String lastUpdatedBy = "script";
+        int newDivision = 0;
+
+        //get the proper division ID
+        Connection connect = JDBC.getConnection();
+        DBQuery.setStatement(connect);
+        Statement statement = DBQuery.getStatement();
+        try{
+            String query = "SELECT * from first_level_divisions";
+            statement.execute(query);
+            ResultSet rs = statement.getResultSet();
+            while(rs.next()){
+                String oldDivision = rs.getString("Division");
+                if(oldDivision.equals(selectedDivision))
+                    newDivision = rs.getInt("Division_ID");
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        if( (selectedCountry == null) || (selectedDivision == null) || name.isEmpty() || address.isEmpty() || postal.isEmpty() || phone.isEmpty()){
+            myAlert("Please fill out each field.");
+            return;
+        }
+
+        int customerIndex = 0;
+        ObservableList<Customers> customers = Tables.getAllCustomers();
+        for(int i = 0; i < customers.size(); i++){
+            if(customers.get(i).getId() == Tables.getModifyCustomer().getId()){
+                customerIndex = i;
+                break;
+            }
+        }
+
+        Tables.updateCustomer(customerIndex, (new Customers(id,name,address,postal,phone,UTCCreateDate,createdBy,UTCLastUpdate,lastUpdatedBy,newDivision)));
+
+        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/mainPage.fxml")));
+        stage.setScene(new Scene(scene,1235,558));
+        stage.show();
+    }
+
+
     private void myAlert(String alert){
         Alert a = new Alert(Alert.AlertType.ERROR);
         a.setContentText(alert);

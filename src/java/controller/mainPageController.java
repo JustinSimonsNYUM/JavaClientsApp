@@ -17,6 +17,7 @@ import model.Tables;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -328,7 +329,7 @@ public class mainPageController implements Initializable {
     }
 
     @FXML
-    void deleteApptButtonAction(ActionEvent event) {
+    void deleteApptButtonAction(ActionEvent event) throws SQLException {
         Appointments selectedAppt = apptTable.getSelectionModel().getSelectedItem();
         if(selectedAppt == null){
             myAlert(Alert.AlertType.ERROR,"Either no appointment was found in database or no customer is selected.");
@@ -346,7 +347,7 @@ public class mainPageController implements Initializable {
     }
 
     @FXML
-    void deleteCustomerButtonAction(ActionEvent event) {
+    void deleteCustomerButtonAction(ActionEvent event) throws SQLException {
         Customers selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
         if(selectedCustomer == null) {
             myAlert(Alert.AlertType.ERROR,"Either no customer was found in database or no customer is selected.");

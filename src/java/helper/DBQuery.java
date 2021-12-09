@@ -19,7 +19,7 @@ public class DBQuery {
     }
 
     public static void setPreparedStatement(Connection connect, String sqlQuery) throws SQLException{
-        statement = connect.prepareStatement(sqlQuery);
+        preparedStatement = connect.prepareStatement(sqlQuery);
     }
 
     public static PreparedStatement getPreparedStatement(){

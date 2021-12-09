@@ -23,9 +23,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
@@ -90,7 +88,7 @@ public class addCustomerController implements Initializable {
         }
     }
 
-    private static int customerID = 3;
+    private static int customerID = Tables.getAllCustomers().get(Tables.getAllCustomers().size()-1).getId();
 
     Stage stage;
     Parent scene;
@@ -156,13 +154,23 @@ public class addCustomerController implements Initializable {
         }
         //get new customer data
         customerID++;
+        //change create date from local to UTC
         LocalDate createDateDate = LocalDate.now();
         LocalTime createDateTime = LocalTime.now();
-        LocalDateTime createDate = LocalDateTime.of(createDateDate,createDateTime).truncatedTo(ChronoUnit.MINUTES);
+        LocalDateTime localCreateDate = LocalDateTime.of(createDateDate,createDateTime).truncatedTo(ChronoUnit.MINUTES);
+        ZonedDateTime localZonedDateTime = ZonedDateTime.of(localCreateDate, ZoneId.systemDefault());
+        ZonedDateTime UTCZonedDateTime = ZonedDateTime.ofInstant(localZonedDateTime.toInstant(), ZoneId.of("UTC"));
+        LocalDateTime UTCCreateDate = UTCZonedDateTime.toLocalDateTime();
+
         String createdBy = "script";
+        //change last update from local to UTC
         LocalDate lastUpdateDate = LocalDate.now();
         LocalTime lastUpdateTime = LocalTime.now();
-        LocalDateTime lastUpdate = LocalDateTime.of(lastUpdateDate,lastUpdateTime).truncatedTo(ChronoUnit.MINUTES);
+        LocalDateTime localLastUpdate = LocalDateTime.of(lastUpdateDate,lastUpdateTime).truncatedTo(ChronoUnit.MINUTES);
+        localZonedDateTime = ZonedDateTime.of(localLastUpdate, ZoneId.systemDefault());
+        UTCZonedDateTime = ZonedDateTime.ofInstant(localZonedDateTime.toInstant(), ZoneId.of("UTC"));
+        LocalDateTime UTCLastUpdate = UTCZonedDateTime.toLocalDateTime();
+
         String lastUpdatedBy = "script";
         int newDivision = 0;
         //get the proper division ID
@@ -183,12 +191,13 @@ public class addCustomerController implements Initializable {
         }
 
 
-        Tables.addCustomer(new Customers(customerID,name,address,postal,phone,createDate,createdBy,lastUpdate,lastUpdatedBy,newDivision));
+        Tables.addNewCustomer(new Customers(customerID,name,address,postal,phone,UTCCreateDate,createdBy,UTCLastUpdate,lastUpdatedBy,newDivision));
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/mainPage.fxml")));
         stage.setScene(new Scene(scene,1235,558));
         stage.show();
     }
+
     private void myAlert(String alert){
         Alert a = new Alert(Alert.AlertType.ERROR);
         a.setContentText(alert);

@@ -139,7 +139,7 @@ public class addApptController implements Initializable {
 
     }
 
-    private static int apptID = 2;
+    private static int apptID = Tables.getAllAppointments().get(Tables.getAllAppointments().size()-1).getId();
 
     Stage stage;
     Parent scene;
@@ -150,29 +150,16 @@ public class addApptController implements Initializable {
         if(selectedEndTime == null) {
             return;
         }
-        LocalDateTime selectedEndDateTime;
-        if(selectedEndTime.equals(LocalTime.MIDNIGHT) || ((selectedEndTime.isAfter(LocalTime.MIDNIGHT)) && (selectedEndTime.isBefore(localStartTimes.get(0)))))
-            selectedEndDateTime = LocalDateTime.of(LocalDate.now().plusDays(1),selectedEndTime);
-        else
-            selectedEndDateTime = LocalDateTime.of(LocalDate.now(),selectedEndTime);
-
-        addNewApptStartTime.getItems().clear();
-        for(LocalDateTime time : localStartDateTimes){
-            if(time.isBefore(selectedEndDateTime)) {
-                addNewApptStartTime.getItems().add(time.toLocalTime());
-            }
-            else
-                return;
-        }
+        addNewApptEndTime.getSelectionModel().clearSelection();
     }
 
 
     @FXML
     void addNewApptEndTimeClicked(MouseEvent mouseEvent) {
         LocalTime selectedStartTime = addNewApptStartTime.getValue();
-        if(selectedStartTime == null) {
+        if(selectedStartTime == null)
             return;
-        }
+
         LocalDateTime selectedStartDateTime;
         if(selectedStartTime.equals(LocalTime.MIDNIGHT) || ((selectedStartTime.isAfter(LocalTime.MIDNIGHT)) && (selectedStartTime.isBefore(localStartTimes.get(0)))))
             selectedStartDateTime = LocalDateTime.of(LocalDate.now().plusDays(1),selectedStartTime);
@@ -223,6 +210,7 @@ public class addApptController implements Initializable {
             return;
         }
 
+
 //**************************************CHANGE THE TIMES FROM LOCAL TO UTC**********************
         //get the rest of the new appt data: createDate, createdBy, lastUpdate,LastUpdatedBY, contactID
         apptID++;
@@ -230,9 +218,9 @@ public class addApptController implements Initializable {
         LocalDate createDateDate = LocalDate.now();
         LocalTime createDateTime = LocalTime.now();
         LocalDateTime localCreateDate = LocalDateTime.of(createDateDate,createDateTime).truncatedTo(ChronoUnit.MINUTES);
-        ZonedDateTime localCreateZonedDateTime = ZonedDateTime.of(localCreateDate, ZoneId.systemDefault());
-        ZonedDateTime UTCCreateZonedDateTime = ZonedDateTime.ofInstant(localCreateZonedDateTime.toInstant(), ZoneId.of("UTC"));
-        LocalDateTime UTCCreateDate = UTCCreateZonedDateTime.toLocalDateTime();
+        ZonedDateTime localZonedDateTime = ZonedDateTime.of(localCreateDate, ZoneId.systemDefault());
+        ZonedDateTime UTCZonedDateTime = ZonedDateTime.ofInstant(localZonedDateTime.toInstant(), ZoneId.of("UTC"));
+        LocalDateTime UTCCreateDate = UTCZonedDateTime.toLocalDateTime();
 
         String createdBy = "script";
         //change last Update from local to UTC
@@ -265,6 +253,15 @@ public class addApptController implements Initializable {
         ZonedDateTime localEndZoned = ZonedDateTime.of(localEndDateTime, ZoneId.systemDefault());
         ZonedDateTime UTCEndZonedDateTime = ZonedDateTime.ofInstant(localEndZoned.toInstant(), ZoneId.of("UTC"));
         LocalDateTime UTCEndDateTime =  UTCEndZonedDateTime.toLocalDateTime();
+//*****************FIGURE OUT OUT OF BUISSNESS HOURS ALERTS****************
+        boolean outOfBusinessHours = false;
+        if(startTime.isAfter(localStartTimes.get(0).minusMinutes(1)) && (endTime.isBefore(localEndTimes.get(localEndTimes.size()-1).plusMinutes(1)))){
+            outOfBusinessHours = true;
+        }
+        if(outOfBusinessHours){
+            myAlert("The start or end time is not within the buisness hours of "+ localStartTimes.get(0) + " and " + localEndTimes.get(localEndTimes.size()-1));
+            return;
+        }
 
         int contactID = 0;
 
