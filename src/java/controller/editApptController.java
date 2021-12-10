@@ -312,7 +312,7 @@ public class editApptController implements Initializable {
                 break;
             }
         }
-        System.out.println(UTCStartDateTime);
+
         Tables.updateAppt(apptIndex, (new Appointments(apptID, title, description, location, type, UTCStartDateTime, UTCEndDateTime, UTCCreateDate, createdBy, UTCLastUpdate, lastUpdatedBy, customerID, userID, contactID)));
 
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();

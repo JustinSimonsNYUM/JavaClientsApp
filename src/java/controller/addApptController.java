@@ -1,5 +1,11 @@
 package controller;
+/**
+ * class addApptController.java
+ */
 
+/**
+ * @author Justin Simons
+ * */
 import helper.DBQuery;
 import helper.JDBC;
 import javafx.collections.FXCollections;
@@ -27,6 +33,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * class addApptController adds a new appt to the database.
+ */
 public class addApptController implements Initializable {
     @FXML
     private ComboBox<String> addNewApptContact;
@@ -66,7 +75,9 @@ public class addApptController implements Initializable {
     ObservableList<LocalDateTime> localStartDateTimes = ZoneTimes.getLocalDateStartTimes();
     ObservableList<LocalDateTime> localEndDateTimes = ZoneTimes.getLocalDateEndTimes();
 
-
+    /**
+     * initialize calls fillComboBoxes()
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -76,6 +87,17 @@ public class addApptController implements Initializable {
         }
     }
 
+    /**
+     * fillComboBoxes prefills the combo boxes.
+     * gets a connection to the database
+     * fills the userId combo box by getting all users from the DB.
+     * fills the customerID combo box by getting all customers from the DB.
+     * fills the contacts combo box by getting all contacts from the DB.
+     * fills the type combo box.
+     * fills the start and end combo boxes.
+     * disables the weekends and previous dates from the date picker.
+     * @throws SQLException is called if a connection is not made.
+     */
     void fillComboBoxes() throws SQLException {
         Connection connect = JDBC.getConnection();
         DBQuery.setStatement(connect);
@@ -144,6 +166,11 @@ public class addApptController implements Initializable {
     Stage stage;
     Parent scene;
 
+    /**
+     * addNewApptStartTimeClicked first checks if the end time is set.
+     * if end time is set then its cleared. if not nothing happens
+     * @param mouseEvent called when the start time combo box is clicked
+     */
     @FXML
     void addNewApptStartTimeClicked(MouseEvent mouseEvent) {
         LocalTime selectedEndTime = addNewApptEndTime.getValue();
@@ -152,7 +179,16 @@ public class addApptController implements Initializable {
         }
         addNewApptEndTime.getSelectionModel().clearSelection();
     }
-
+    /**
+     * addNewApptEndTimeClicked first checks if the start time is set.
+     * if start time is empty, nothing happens.
+     * if it's not empty, then it checks to see if end time after midnight.
+     * if it is, it adds a day date and sets the local start date time.
+     * if it's not after midnight, then is just sets the local start date time.
+     * it then clears all times from the end times.
+     * it then adds all end times that are after the selected start time.
+     * @param mouseEvent called when the start time combo box is clicked
+     */
 
     @FXML
     void addNewApptEndTimeClicked(MouseEvent mouseEvent) {
@@ -182,7 +218,11 @@ public class addApptController implements Initializable {
         }
     }
 
-
+    /**
+     * addNewApptCancelButton closes the app
+     * @param event called when cancel button is clicked.
+     * @throws IOException is thrown if no scene is found.
+     */
     @FXML
     void addNewApptCancelButton(ActionEvent event) throws IOException {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
@@ -191,6 +231,12 @@ public class addApptController implements Initializable {
         stage.show();
     }
 
+    /**
+     *
+     * @param event called when submit button is clicked.
+     * @throws IOException thrown if no scene is found
+     * @throws SQLException thrown if no connection is made.
+     */
     @FXML
     void addNewApptSubmitButton(ActionEvent event) throws IOException, SQLException {
         Integer userID = addNewApptUserID.getValue();
@@ -210,8 +256,6 @@ public class addApptController implements Initializable {
             return;
         }
 
-
-//**************************************CHANGE THE TIMES FROM LOCAL TO UTC**********************
         //get the rest of the new appt data: createDate, createdBy, lastUpdate,LastUpdatedBY, contactID
         apptID++;
         //change create date from local to UTC

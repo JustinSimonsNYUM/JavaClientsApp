@@ -14,17 +14,42 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+/**
+ * class Main.java
+ */
+
+/**
+ * @author Justin Simons
+ * */
+
+/**
+ * main class starts the app
+ * */
 
 public class Main extends Application {
-
+    /**
+     * start starts the program
+     * first calls fillTables()
+     * creates a FXML loader to get the login.fxml
+     * set's the controller to the loader
+     * loads the loader to the root
+     * creates a new stage
+     *  set's the title
+     * set's the scene
+     * show's the stage
+     * @param stage creates the primary stage
+     * @throws SQLException gets thrown if mainScreen.fxml fails to load
+     *      the catch sends alert stating "e.getMessage() + " closing program"
+     */
     @Override
     public void start(Stage stage) throws SQLException {
         fillTables();
         try{
             //*******************************CHANGE BACK TO logIn.FXML WHEN DONE*******************************
-           FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainPage.fxml"));//"login.fxml"));//
-           Scene scene = new Scene(fxmlLoader.load(), 1240, 558);
-           //Scene scene = new Scene(fxmlLoader.load(), 400, 200);
+           FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainPage.fxml"));//"reports.fxml"));//"mainPage.fxml"));//"login.fxml"));//
+           Scene scene = new Scene(fxmlLoader.load(), 1240, 558);//main
+           //Scene scene = new Scene(fxmlLoader.load(), 400, 200);//login
+           //Scene scene = new Scene(fxmlLoader.load(), 678, 618);//reports
            stage.setScene(scene);
            stage.setResizable(false);
            stage.setTitle("Java Client App");
@@ -38,12 +63,23 @@ public class Main extends Application {
        }
     }
 
+    /**
+     * main launches the program
+     * @param args set to launch
+     */
     public static void main(String[] args) {
         JDBC.openConnection();
         launch();
         JDBC.closeConnection();
     }
 
+    /**
+     * fill tables first connects to the database
+     * gets the result statement from all appointments
+     * adds all appointment data to the class Tables allAppointments.
+     * then gets all customers from the database and adds it to class Tables allCustomers.
+     * @throws SQLException is called if it can't get a connection
+     */
     void fillTables() throws SQLException {
 
         Connection connect = JDBC.getConnection();
@@ -108,54 +144,4 @@ public class Main extends Application {
             System.out.println(e.getMessage());
         }
     }
-    /*Connection connect = JDBC.getConnection();
-        String insertStatement = "INSERT INTO countries (Country, Create_Date, Created_By, Last_Updated_By) VALUES (?,?,?,?)";
-
-        DBQuery.setPreparedStatement(connect, insertStatement);
-        PreparedStatement ps = DBQuery.getPreparedStatement();
-
-        String countryName;
-        String date = "2021-11-12 00:00:00";
-        String createdBy = "admin";
-        String lastUpdatedBy = "admin";
-
-        Scanner keyboard = new Scanner(System.in);
-        countryName = keyboard.nextLine();*/
-    /*how to process a result set to use data from a DB
-    Connection connect = JDBC.getConnection();
-        DBQuery.setStatement(connect);
-        Statement statement = DBQuery.getStatement();
-        try{
-            String s = "SELECT * from countries";
-            statement.execute(s);
-            ResultSet rs = statement.getResultSet();
-            while(rs.next()){
-                int Country_ID = rs.getInt("Country_ID");
-                String Country = rs.getString("Country");
-                LocalDate date = rs.getDate("Create_Date").toLocalDate();
-                LocalTime time = rs.getTime("Create_Date").toLocalTime();
-                String Created_By = rs.getString("Created_By");
-                LocalDateTime Last_Update = rs.getTimestamp("Last_Update").toLocalDateTime();
-
-                System.out.println(Country_ID + " | " + Country + " | " + date + " | " + time + " | " + Created_By + " | " + Last_Update);
-            }
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-*/
-    /* how to use SQL query on DB
-    Connection connect = JDBC.getConnection();
-        DBQuery.setStatement(connect);
-        Statement statement = DBQuery.getStatement();
-        String insertSQL = "INSERT INTO countries (Country, Create_Date, Created_By, Last_Updated_By)" +
-                "VALUES ('US', '2021-11-12', 'admin', 'admin')";
-
-        statement.execute(insertSQL);
-
-        //rows affected
-        if(statement.getUpdateCount() > 0)
-            System.out.println(statement.getUpdateCount() + " rows affected in statement.");
-        else
-            System.out.println("nothing was added");
-        */
 }
