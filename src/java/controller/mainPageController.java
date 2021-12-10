@@ -405,7 +405,7 @@ public class mainPageController implements Initializable {
     void goToReportsButtonAction(ActionEvent event) throws IOException {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/reports.fxml")));
-        stage.setScene(new Scene(scene,600,400));
+        stage.setScene(new Scene(scene,678,618));
         stage.show();
     }
     @FXML

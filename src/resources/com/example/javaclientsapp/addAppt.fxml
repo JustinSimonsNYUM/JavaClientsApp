@@ -168,12 +168,12 @@
                     <Insets top="11.0"/>
                 </VBox.margin>
             </DatePicker>
-            <ComboBox fx:id="addNewApptStartTime" onMouseClicked="#addNewApptStartTimeClicked" prefWidth="181.0">
+            <ComboBox fx:id="addNewApptStartTime" prefWidth="181.0">
                 <VBox.margin>
                     <Insets top="12.0"/>
                 </VBox.margin>
             </ComboBox>
-            <ComboBox fx:id="addNewApptEndTime" onMouseClicked="#addNewApptEndTimeClicked" prefWidth="181.0">
+            <ComboBox fx:id="addNewApptEndTime" prefWidth="181.0">
                 <VBox.margin>
                     <Insets top="12.0"/>
                 </VBox.margin>

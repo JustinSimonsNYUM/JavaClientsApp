@@ -11,17 +11,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-
 public class reportsController {
-
-    @FXML
-    private ComboBox<?> reportApptMonth;
-
-    @FXML
-    private Label reportApptResult;
-
-    @FXML
-    private ComboBox<?> reportApptType;
 
     @FXML
     private TableColumn<?, ?> reportScheduleApptID;
@@ -50,13 +40,68 @@ public class reportsController {
     @FXML
     private TableColumn<?, ?> reportScheduleType;
 
+    @FXML
+    private Label reportsTotalApptsApr;
+
+    @FXML
+    private Label reportsTotalApptsAug;
+
+    @FXML
+    private Label reportsTotalApptsDBrief;
+
+    @FXML
+    private Label reportsTotalApptsDec;
+
+    @FXML
+    private Label reportsTotalApptsFeb;
+
+    @FXML
+    private Label reportsTotalApptsJan;
+
+    @FXML
+    private Label reportsTotalApptsJuly;
+
+    @FXML
+    private Label reportsTotalApptsJune;
+
+    @FXML
+    private Label reportsTotalApptsMar;
+
+    @FXML
+    private Label reportsTotalApptsMay;
+
+    @FXML
+    private Label reportsTotalApptsNov;
+
+    @FXML
+    private Label reportsTotalApptsOct;
+
+    @FXML
+    private Label reportsTotalApptsPlanning;
+
+    @FXML
+    private Label reportsTotalApptsSep;
+
+    @FXML
+    private Label reportsTotalApptsTrain;
+
+    @FXML
+    private Label reportsTotalCustomersCanada;
+
+    @FXML
+    private Label reportsTotalCustomersUK;
+
+    @FXML
+    private Label reportsTotalCustomersUS;
+
+    @FXML
+    void reportScheduleChooseContactChosen(ActionEvent event) {
+
+    }
+
     Stage stage;
     Parent scene;
 
-    @FXML
-    void reportApptCalculateButton(ActionEvent event) {
-
-    }
     @FXML
     void reportApptReturnButton(ActionEvent event) throws IOException {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
@@ -66,12 +111,14 @@ public class reportsController {
     }
 
     @FXML
-    void reportOtherReturnButton(ActionEvent event) throws IOException {
+    void reportCustomersReturnButton(ActionEvent event) throws IOException {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/mainPage.fxml")));
         stage.setScene(new Scene(scene,1235,558));
         stage.show();
     }
+
+
 
     @FXML
     void reportScheduleReturnButton(ActionEvent event) throws IOException {
@@ -80,4 +127,5 @@ public class reportsController {
         stage.setScene(new Scene(scene,1235,558));
         stage.show();
     }
+
 }
