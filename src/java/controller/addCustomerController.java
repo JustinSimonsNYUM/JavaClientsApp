@@ -2,6 +2,8 @@ package controller;
 
 import helper.DBQuery;
 import helper.JDBC;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +28,7 @@ import java.sql.Statement;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -59,6 +62,9 @@ public class addCustomerController implements Initializable {
         }
     }
 
+    ObservableList<String> allCountries = FXCollections.observableArrayList();
+    ObservableList<String> allDivisions = FXCollections.observableArrayList();
+
     void fillComboBoxes() throws SQLException {
         Connection connect = JDBC.getConnection();
         DBQuery.setStatement(connect);
@@ -69,6 +75,7 @@ public class addCustomerController implements Initializable {
             ResultSet rs = statement.getResultSet();
             while(rs.next()){
                 String country = rs.getString("Country");
+                allCountries.add(country);
                 addNewCustomerCountry.getItems().add(country);
             }
         } catch (Exception e){
@@ -80,6 +87,7 @@ public class addCustomerController implements Initializable {
             ResultSet rs = statement.getResultSet();
             while(rs.next()){
                 String division = rs.getString("Division");
+                allDivisions.add(division);
                 addNewCustomerDivision.getItems().add(division);
             }
         }
@@ -150,6 +158,26 @@ public class addCustomerController implements Initializable {
 
         if( (selectedCountry == null) || (selectedDivision == null) || name.isEmpty() || address.isEmpty() || postal.isEmpty() || phone.isEmpty()){
             myAlert("Please fill out each field.");
+            return;
+        }
+        //make sure that the address doesn't contain a country or division name.
+        boolean CorDFound = false;
+        for(String countries: allCountries){
+            String lowCase = address.toLowerCase(Locale.ROOT);
+            if (lowCase.contains(countries.toLowerCase(Locale.ROOT))) {
+                CorDFound = true;
+                break;
+            }
+        }
+        for(String divisions: allDivisions){
+            String lowCase = address.toLowerCase(Locale.ROOT);
+            if (lowCase.contains(divisions.toLowerCase(Locale.ROOT))) {
+                CorDFound = true;
+                break;
+            }
+        }
+        if(CorDFound) {
+            myAlert("Make sure the address doesn't contain a Country or Division name.");
             return;
         }
         //get new customer data

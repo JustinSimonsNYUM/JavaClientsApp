@@ -5,8 +5,10 @@ package model;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Alert;
 
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 
 public class Appointments {
 
@@ -143,6 +145,34 @@ public class Appointments {
 
     public void setContactID(int contactID) {
         this.contactID = contactID;
+    }
+
+    public static void checkUpcomingAppt(){
+        LocalDateTime today = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+        System.out.println(today);
+        //LocalDateTime today = LocalDateTime.of(LocalDate.of(2021,12,9), LocalTime.of(15,0));
+        boolean apptFound = false;
+        String alertString = "";
+        for(Appointments appt : Tables.getAllAppointments()){
+            if(appt.getStart().isEqual(today) || appt.getStart().isEqual(today.plusMinutes(15)) || (appt.getStart().isAfter(today) && appt.getStart().isBefore(today.plusMinutes(15)))){
+                alertString = "There is an upcoming appointment within 15 minutes:\n" +
+                        "Appointment ID: " + appt.getId() +
+                        "\nDate: " + appt.getStart().toLocalDate() +
+                        "\nStart Time: " + appt.getStart().toLocalTime();
+                apptFound = true;
+                break;
+            }
+        }
+        if(apptFound)
+            myAlert(Alert.AlertType.INFORMATION, alertString);
+        else
+            myAlert(Alert.AlertType.CONFIRMATION, "There are no upcoming appointments within the next 15 minutes.");
+    }
+
+    public static void myAlert(Alert.AlertType alertType, String alert){
+        Alert a = new Alert(alertType);
+        a.setContentText(alert);
+        a.showAndWait();
     }
 
 }

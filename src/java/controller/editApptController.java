@@ -223,14 +223,6 @@ public class editApptController implements Initializable {
             myAlert("Please fill out each field.");
             return;
         }
-        boolean outOfBusinessHours = false;
-        if(startTime.isAfter(localStartTimes.get(0).minusMinutes(1)) && (endTime.isBefore(localEndTimes.get(localEndTimes.size()-1).plusMinutes(1)))){
-            outOfBusinessHours = true;
-        }
-        if(outOfBusinessHours){
-            myAlert("The start or end time is not within the buisness hours of "+ localStartTimes.get(0) + " and " + localEndTimes.get(localEndTimes.size()-1));
-            return;
-        }
 
         //get the rest of the updated appt data: createDate, createdBy, lastUpdate,LastUpdatedBY, contactIDf
         LocalDateTime localCreateDate = Tables.getModifyAppt().getCreateDate();
@@ -247,7 +239,7 @@ public class editApptController implements Initializable {
         String lastUpdatedBy = "script";
         //set the startDateTimes
         LocalDateTime localStartDateTime;
-        if(startTime.equals(LocalTime.MIDNIGHT) || startTime.isAfter(LocalTime.MIDNIGHT) && (startTime.isBefore(localStartTimes.get(0))))
+        if(startTime.equals(LocalTime.MIDNIGHT) || startTime.isAfter(LocalTime.MIDNIGHT) && (startTime.isBefore(localEndTimes.get(localEndTimes.size()-1))))
             localStartDateTime = LocalDateTime.of(date.plusDays(1),startTime);
         else
             localStartDateTime = LocalDateTime.of(date,startTime);
@@ -256,13 +248,42 @@ public class editApptController implements Initializable {
         LocalDateTime UTCStartDateTime = UTCZonedDateTime.toLocalDateTime();
         //set the endDateTimes
         LocalDateTime localEndDateTime;
-        if(endTime.equals(LocalTime.MIDNIGHT) || endTime.isAfter(LocalTime.MIDNIGHT) && (endTime.isBefore(localStartTimes.get(0))))
+        if(endTime.equals(LocalTime.MIDNIGHT) || endTime.isAfter(LocalTime.MIDNIGHT) && (endTime.isBefore(localEndTimes.get(localEndTimes.size()-1).plusMinutes(15))))
             localEndDateTime = LocalDateTime.of(date.plusDays(1),endTime);
         else
             localEndDateTime = LocalDateTime.of(date,endTime);
         localZonedDateTime = ZonedDateTime.of(localEndDateTime, ZoneId.systemDefault());
         UTCZonedDateTime = ZonedDateTime.ofInstant(localZonedDateTime.toInstant(), ZoneId.of("UTC"));
         LocalDateTime UTCEndDateTime = UTCZonedDateTime.toLocalDateTime();
+        //alert if times are not within the business hours
+        LocalDateTime startOfBH = LocalDateTime.of(date,localStartTimes.get(0).minusMinutes(5));
+        LocalDateTime endOfBH = LocalDateTime.of(date.plusDays(1),localStartTimes.get(localEndTimes.size() - 1).plusMinutes(15));
+        if(localStartDateTime.isBefore(startOfBH) || localEndDateTime.isAfter(endOfBH)){
+            myAlert("The start or end time is not within the buisness hours of "+ localStartTimes.get(0) + " and " + localEndTimes.get(localEndTimes.size()-1));
+            return;
+        }
+        //alert if the selected time overlaps a preexisting appointment
+        ObservableList<Appointments> allAppts = Tables.getAllAppointments();
+        boolean overLappedFound = false;
+        StringBuilder alertString = new StringBuilder();
+        for(Appointments appt: allAppts){
+            if(appt.getId() == apptID)
+                continue;
+            LocalDateTime oldApptStart = appt.getStart();
+            LocalDateTime oldApptEnd = appt.getEnd();
+            if ((localStartDateTime.isAfter(oldApptStart.minusMinutes(5)) && localStartDateTime.isBefore(oldApptEnd.plusMinutes(5))) || (localEndDateTime.isAfter(oldApptStart.minusMinutes(5)) && localEndDateTime.isBefore(oldApptEnd.plusMinutes(5))  )) {
+                alertString.append("\nAppointment with ID: ").append(appt.getId()).append(".\n       Start time: ").append(appt.getStart().toLocalDate()).append(" ").append(appt.getStart().toLocalTime()).append(".\n       End time: ").append(appt.getEnd().toLocalDate()).append(" ").append(appt.getEnd().toLocalTime()).append(".");
+                overLappedFound = true;
+            }
+            if(oldApptStart.isAfter(localStartDateTime) && oldApptEnd.isBefore(localEndDateTime)){
+                alertString.append("\nAppointment with ID: ").append(appt.getId()).append(".\n       Start time: ").append(appt.getStart().toLocalDate()).append(" ").append(appt.getStart().toLocalTime()).append(".\n       End time: ").append(appt.getEnd().toLocalDate()).append(" ").append(appt.getEnd().toLocalTime()).append(".");
+                overLappedFound = true;
+            }
+        }
+        if(overLappedFound) {
+            myAlert("The following appointment(s) are overlapping with this new appointment: " + alertString);
+            return;
+        }
 
         int contactID = 0;
 
@@ -291,7 +312,7 @@ public class editApptController implements Initializable {
                 break;
             }
         }
-
+        System.out.println(UTCStartDateTime);
         Tables.updateAppt(apptIndex, (new Appointments(apptID, title, description, location, type, UTCStartDateTime, UTCEndDateTime, UTCCreateDate, createdBy, UTCLastUpdate, lastUpdatedBy, customerID, userID, contactID)));
 
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();

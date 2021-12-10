@@ -22,7 +22,7 @@ public class Main extends Application {
         fillTables();
         try{
             //*******************************CHANGE BACK TO logIn.FXML WHEN DONE*******************************
-           FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainPage.fxml"));
+           FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainPage.fxml"));//"login.fxml"));//
            Scene scene = new Scene(fxmlLoader.load(), 1240, 558);
            //Scene scene = new Scene(fxmlLoader.load(), 400, 200);
            stage.setScene(scene);

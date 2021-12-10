@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Appointments;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -65,12 +66,13 @@ public class logInController {
             scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/mainPage.fxml")));
             stage.setScene(new Scene(scene,1235,558));
             stage.show();
+            Appointments.checkUpcomingAppt();
         }
         else if(userId.isEmpty() || password.isEmpty()){
             alert.setContentText((String) rb.getObject("alertEmpty"));
             alert.show();
         }
-        else if((!userId.equals("test")) || (!password.equals("test"))){
+        else {
             alert.setContentText((String) rb.getObject("alertWrong"));
             alert.show();
         }
