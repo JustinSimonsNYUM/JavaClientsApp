@@ -1,5 +1,11 @@
 package controller;
+/**
+ * class addApptController.java
+ */
 
+/**
+ * @author Justin Simons
+ * */
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +19,9 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
+/**
+ * class logInController logs the user in
+ */
 public class logInController {
 
 
@@ -38,6 +46,10 @@ public class logInController {
     @FXML
     private TextField userIdLogIn;
 
+    /**
+     * initialize sets login screen to either french or english.
+     * sets the exit button, log in button, zone id, password label, and user name to english or french
+     */
     @FXML
     private void initialize(){
         ResourceBundle rb = ResourceBundle.getBundle("RB", Locale.getDefault());
@@ -51,6 +63,14 @@ public class logInController {
     Stage stage;
     Parent scene;
 
+    /**
+     * logInButton logs the user in.
+     * it first gets the text entered for the userID and password.
+     * it checks to make sure that both userID and password are "test"
+     * if it is then it opens up the main page. and also checks for upcoming appointments in the next 15 minutes.
+     * @param event is called when the log in button is clicked.
+     * @throws IOException thrown if can't load the scene.f
+     */
     @FXML
     void logInButton(ActionEvent event) throws IOException{
         String userId = userIdLogIn.getText();
@@ -78,6 +98,10 @@ public class logInController {
         }
     }
 
+    /**
+     * logInFormExitButton closes the program
+     * @param event called when exit button is called
+     */
     @FXML
     void logInFormExitButton(ActionEvent event) {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();

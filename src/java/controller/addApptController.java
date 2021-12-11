@@ -232,7 +232,15 @@ public class addApptController implements Initializable {
     }
 
     /**
-     *
+     *addNewApptSubmitButton sends the new data to create a new appt.
+     * first gets all the values from the the user input.
+     * makes sure none of them are empty.
+     * changes the LocalDateTimes to UTC zone.
+     * makes sure the times are within the business hours.
+     * makes sure the times don't overlap with preexisting appointments.
+     * Gets the contact ID from the chosen contact name.
+     * adds the new appt to the Tables class.
+     * returns to the main page.
      * @param event called when submit button is clicked.
      * @throws IOException thrown if no scene is found
      * @throws SQLException thrown if no connection is made.
@@ -353,6 +361,10 @@ public class addApptController implements Initializable {
         stage.show();
     }
 
+    /**
+     * myAlert shows an alert.
+     * @param alert gets the string that will be presented in the alert
+     */
     private void myAlert(String alert){
         Alert a = new Alert(Alert.AlertType.ERROR);
         a.setContentText(alert);

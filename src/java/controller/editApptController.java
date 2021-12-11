@@ -1,5 +1,11 @@
 package controller;
+/**
+ * class editApptController.java
+ */
 
+/**
+ * @author Justin Simons
+ * */
 import helper.DBQuery;
 import helper.JDBC;
 import javafx.collections.ObservableList;
@@ -27,7 +33,9 @@ import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
+/**
+ * class editApptController edits the appt in the database.
+ */
 public class editApptController implements Initializable {
     @FXML
     private TextField editApptTitle;
@@ -67,7 +75,10 @@ public class editApptController implements Initializable {
     ObservableList<LocalDateTime> localStartDateTimes = ZoneTimes.getLocalDateStartTimes();
     ObservableList<LocalDateTime> localEndDateTimes = ZoneTimes.getLocalDateEndTimes();
 
-
+    /**
+     * initialize calls fillComboBoxes()
+     * then prefills all fields from the chosen appointment to edit.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -90,6 +101,17 @@ public class editApptController implements Initializable {
         editApptEndTime.getSelectionModel().select(modifyAppt.getEnd().toLocalTime());
     }
 
+    /**
+     * fillComboBoxes prefills the combo boxes.
+     * gets a connection to the database
+     * fills the userId combo box by getting all users from the DB.
+     * fills the customerID combo box by getting all customers from the DB.
+     * fills the contacts combo box by getting all contacts from the DB.
+     * fills the type combo box.
+     * fills the start and end combo boxes.
+     * disables the weekends and previous dates from the date picker.
+     * @throws SQLException is called if a connection is not made.
+     */
     void fillComboBoxes() throws SQLException {
         Connection connect = JDBC.getConnection();
         DBQuery.setStatement(connect);
@@ -156,6 +178,11 @@ public class editApptController implements Initializable {
     Stage stage;
     Parent scene;
 
+    /**
+     * editApptStartTimeClicked first checks if the end time is set.
+     * if end time is set then its cleared. if not nothing happens
+     * @param mouseEvent called when the start time combo box is clicked
+     */
     @FXML
     void editApptStartTimeClicked(MouseEvent mouseEvent) {
         LocalTime selectedEndTime = editApptEndTime.getValue();
@@ -164,7 +191,16 @@ public class editApptController implements Initializable {
         }
         editApptEndTime.getSelectionModel().clearSelection();
     }
-
+    /**
+     * editApptEndTimeClicked first checks if the start time is set.
+     * if start time is empty, nothing happens.
+     * if it's not empty, then it checks to see if end time after midnight.
+     * if it is, it adds a day date and sets the local start date time.
+     * if it's not after midnight, then is just sets the local start date time.
+     * it then clears all times from the end times.
+     * it then adds all end times that are after the selected start time.
+     * @param mouseEvent called when the start time combo box is clicked
+     */
     @FXML
     void editApptEndTimeClicked(MouseEvent mouseEvent) {
         LocalTime selectedStartTime = editApptStartTime.getValue();
@@ -195,7 +231,11 @@ public class editApptController implements Initializable {
         }
     }
 
-
+    /**
+     * addNewApptCancelButton closes the app
+     * @param event called when cancel button is clicked.
+     * @throws IOException is thrown if no scene is found.
+     */
     @FXML
     void editApptCancelButton(ActionEvent event) throws IOException {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
@@ -203,7 +243,20 @@ public class editApptController implements Initializable {
         stage.setScene(new Scene(scene,1235,558));
         stage.show();
     }
-
+    /**
+     *editApptSubmitButton sends the new data to create a new appt.
+     * first gets all the values from the the user input.
+     * makes sure none of them are empty.
+     * changes the LocalDateTimes to UTC zone.
+     * makes sure the times are within the business hours.
+     * makes sure the times don't overlap with preexisting appointments.
+     * Gets the contact ID from the chosen contact name.
+     * gets the chosen appt and changes the info to the new data and adds it to the Tables class.
+     * returns to the main page.
+     * @param event called when submit button is clicked.
+     * @throws IOException thrown if no scene is found
+     * @throws SQLException thrown if no connection is made.
+     */
     @FXML
     void editApptSubmitButton(ActionEvent event) throws IOException, SQLException {
         int apptID = Tables.getModifyAppt().getId();
@@ -320,6 +373,10 @@ public class editApptController implements Initializable {
         stage.setScene(new Scene(scene,1235,558));
         stage.show();
     }
+    /**
+     * myAlert shows an alert.
+     * @param alert gets the string that will be presented in the alert
+     */
     private void myAlert(String alert){
         Alert a = new Alert(Alert.AlertType.ERROR);
         a.setContentText(alert);

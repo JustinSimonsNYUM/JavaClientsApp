@@ -1,5 +1,11 @@
 package controller;
+/**
+ * class addCustomerController.java
+ */
 
+/**
+ * @author Justin Simons
+ * */
 import helper.DBQuery;
 import helper.JDBC;
 import javafx.collections.FXCollections;
@@ -31,7 +37,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
+/**
+ * class addCustomerController adds a new customer to the database.
+ */
 public class addCustomerController implements Initializable {
     @FXML
     private TextField addNewCustomerAddress;
@@ -53,7 +61,9 @@ public class addCustomerController implements Initializable {
 
     @FXML
     private TextField addNewCustomerPostal;
-
+    /**
+     * initialize calls fillComboBoxes()
+     */
     public void initialize(URL url, ResourceBundle resourceBundle){
         try {
             fillComboBoxes();
@@ -65,6 +75,13 @@ public class addCustomerController implements Initializable {
     ObservableList<String> allCountries = FXCollections.observableArrayList();
     ObservableList<String> allDivisions = FXCollections.observableArrayList();
 
+    /**
+     * fillComboBoxes prefills the combo boxes.
+     * gets a connection to the database
+     * fills the countries combo box by getting all countries from the DB.
+     * fills the divisions combo box by getting all divisions from the DB.
+     * @throws SQLException is called if a connection is not made.
+     */
     void fillComboBoxes() throws SQLException {
         Connection connect = JDBC.getConnection();
         DBQuery.setStatement(connect);
@@ -100,7 +117,11 @@ public class addCustomerController implements Initializable {
 
     Stage stage;
     Parent scene;
-
+    /**
+     * addNewCustomerCancelButton closes the app
+     * @param event called when cancel button is clicked.
+     * @throws IOException is thrown if no scene is found.
+     */
     @FXML
     void addNewCustomerCancelButton(ActionEvent event) throws IOException {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
@@ -108,6 +129,13 @@ public class addCustomerController implements Initializable {
         stage.setScene(new Scene(scene,1235,558));
         stage.show();
     }
+    /**
+     * addNewCustomerDivisionClicked first checks if the country is set.
+     * if country is empty, nothing happens.
+     * if not, it then connects to the database.
+     * it then adds only the divisions associated with the chosen country.
+     * @param event called when the start time combo box is clicked
+     */
     @FXML
     void addNewCustomerDivisionClicked(MouseEvent event) throws SQLException {
         String selectedCountry = addNewCustomerCountry.getValue();
@@ -147,6 +175,19 @@ public class addCustomerController implements Initializable {
         }
     }
 
+    /**
+     *addNewCustomerSubmitButton sends the new data to create a new customer.
+     * first gets all the values from the the user input.
+     * makes sure none of them are empty.
+     * makes sure that a country and/or division name isn't present in the address.
+     * changes the LocalDateTimes to UTC zone.
+     * Gets the division ID from the chosen division name.
+     * adds the new customer to the Tables class.
+     * returns to the main page.
+     * @param event called when submit button is clicked.
+     * @throws IOException thrown if no scene is found
+     * @throws SQLException thrown if no connection is made.
+     */
     @FXML
     void addNewCustomerSubmitButton(ActionEvent event) throws IOException, SQLException {
         String name = addNewCustomerName.getText().trim();
@@ -225,7 +266,10 @@ public class addCustomerController implements Initializable {
         stage.setScene(new Scene(scene,1235,558));
         stage.show();
     }
-
+    /**
+     * myAlert shows an alert.
+     * @param alert gets the string that will be presented in the alert
+     */
     private void myAlert(String alert){
         Alert a = new Alert(Alert.AlertType.ERROR);
         a.setContentText(alert);

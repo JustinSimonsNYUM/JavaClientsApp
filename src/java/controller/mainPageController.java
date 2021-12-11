@@ -1,5 +1,11 @@
 package controller;
+/**
+ * class mainPageController.java
+ */
 
+/**
+ * @author Justin Simons
+ * */
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,7 +30,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
+/**
+ * class mainPageController shows customer and appointment tables and has buttons to get to every other page.
+ */
 public class mainPageController implements Initializable {
     @FXML
     private ToggleGroup apptRadio;
@@ -131,24 +139,37 @@ public class mainPageController implements Initializable {
     private ObservableList<Appointments> apptList = FXCollections.observableArrayList();
     private ObservableList<Customers> customerList = FXCollections.observableArrayList();
 
-
+    /**
+     * initialize calls CreateApptTable();
+     *  calls CreateCustomerTable();
+     *  calls SetDateTimeFormats();
+     */
     public void initialize(URL url, ResourceBundle resourceBundle){
         CreateApptTable();
         CreateCustomerTable();
         SetDateTimeFormats();
     }
+
+    /**
+     * CreateApptTable sets all appointments to the appt table.
+     */
     private void CreateApptTable() {
         apptTable.setItems(apptList);
         apptList.setAll(Tables.getAllAppointments());
         apptTable.refresh();
     }
-
+    /**
+     * CreateCustomerTable sets all customers to the customer table.
+     */
     private void CreateCustomerTable() {
         customerTable.setItems(customerList);
         customerList.setAll(Tables.getAllCustomers());
         customerTable.refresh();
     }
 
+    /**
+     * SetDateTimeFormats sets the format for each appt LocalDateTime
+     */
     private void SetDateTimeFormats(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
 
@@ -234,10 +255,18 @@ public class mainPageController implements Initializable {
     Stage stage;
     Parent scene;
 
+    /**
+     * apptAllRadio calls CreateApptTable
+     * @param event is called when the all radio button is clicked
+     */
     @FXML
     void apptAllRadio(ActionEvent event) {
         CreateApptTable();
     }
+    /**
+     * apptMonthRadio changes the appt table to only appts in the current month
+     * @param event is called when the month radio button is clicked
+     */
     @FXML
     void apptMonthRadio(ActionEvent event) {
         ObservableList<Appointments> monthAppts = FXCollections.observableArrayList();
@@ -255,7 +284,10 @@ public class mainPageController implements Initializable {
         apptList.setAll(Tables.getAllAppointments());
         apptTable.refresh();
     }
-
+    /**
+     * apptWeekRadio changes the appt table to only appts in the current week
+     * @param event is called when the week radio button is clicked
+     */
     @FXML
     void apptWeekRadio(ActionEvent event) {
         ObservableList<Appointments> weekAppts = FXCollections.observableArrayList();
@@ -300,6 +332,10 @@ public class mainPageController implements Initializable {
         apptTable.refresh();
     }
 
+    /**
+     * addApptButtonAction opens the add appt page
+     * @param event called when the add appt button is clicked
+     */
     @FXML
     void addApptButtonAction(ActionEvent event) {
         try {
@@ -313,7 +349,10 @@ public class mainPageController implements Initializable {
             System.exit(0);
         }
     }
-
+    /**
+     * addApptButtonAction opens the add appt page
+     * @param event called when the add appt button is clicked
+     */
     @FXML
     void addCustomerButtonAction(ActionEvent event) {
         try {
@@ -408,12 +447,19 @@ public class mainPageController implements Initializable {
         stage.setScene(new Scene(scene,678,618));
         stage.show();
     }
+    /**
+     * closeAppButton closes the program
+     * @param event called when exit button is called
+     */
     @FXML
     void closeAppButton(ActionEvent event) {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         stage.close();
     }
-
+    /**
+     * myAlert shows an alert.
+     * @param alert gets the string that will be presented in the alert
+     */
     public void myAlert(Alert.AlertType alertType, String alert){
         Alert a = new Alert(alertType);
         a.setContentText(alert);
