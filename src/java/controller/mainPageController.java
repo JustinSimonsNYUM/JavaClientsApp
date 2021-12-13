@@ -367,6 +367,14 @@ public class mainPageController implements Initializable {
         }
     }
 
+    /**
+     * deleteApptButtonAction deletes an appointment
+     * If first makes sure an appt is selected. If not it sends an alert.
+     * I takes the selected appointment and sends it to the Tables class to be deleted.
+     * then refreshes the appt table with the updated list of appointments.
+     * @param event is called when the delete appt button is clicked
+     * @throws SQLException thrown if the tables delete appointments class throws an SQLException
+     */
     @FXML
     void deleteApptButtonAction(ActionEvent event) throws SQLException {
         Appointments selectedAppt = apptTable.getSelectionModel().getSelectedItem();
@@ -384,7 +392,14 @@ public class mainPageController implements Initializable {
         }
 
     }
-
+    /**
+     * deleteCustomerButtonAction deletes an customer
+     * If first makes sure an customer is selected. If not it sends an alert.
+     * I takes the selected customer and sends it to the Tables class to be deleted.
+     * then refreshes the customer table with the updated list of customers.
+     * @param event is called when the delete customer button is clicked
+     * @throws SQLException thrown if the tables delete customers class throws an SQLException
+     */
     @FXML
     void deleteCustomerButtonAction(ActionEvent event) throws SQLException {
         Customers selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
@@ -404,6 +419,13 @@ public class mainPageController implements Initializable {
         }
     }
 
+    /**
+     * editApptButtonAction sends chosen appt to edit appointment page
+     * if no appt is not selected then nothing happens
+     * if an appt is selected, then it sends the chosen appt to tables setModifyAppt class.
+     * then opens the edit appt page
+     * @param event called when the edit appt button is pressed.
+     */
     @FXML
     void editApptButtonAction(ActionEvent event)  {
         Appointments modifyAppt = apptTable.getSelectionModel().getSelectedItem();
@@ -421,7 +443,13 @@ public class mainPageController implements Initializable {
             System.exit(0);
         }
     }
-
+    /**
+     * editCustomerButtonAction sends chosen customer to edit customer page
+     * if no customer is not selected then nothing happens
+     * if an customer is selected, then it sends the chosen customer to tables setModifyCustomer class.
+     * then opens the edit customer page
+     * @param event called when the edit customer button is pressed.
+     */
     @FXML
     void editCustomerButtonAction(ActionEvent event)  {
         Customers modifyCustomer = customerTable.getSelectionModel().getSelectedItem();
@@ -440,6 +468,11 @@ public class mainPageController implements Initializable {
         }
     }
 
+    /**
+     * goToReportsButtonAction opens report page
+     * @param event called when report button is pressed
+     * @throws IOException thrown if cant find the reports.fxml folder
+     */
     @FXML
     void goToReportsButtonAction(ActionEvent event) throws IOException {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
