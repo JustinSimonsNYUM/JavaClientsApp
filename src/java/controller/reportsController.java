@@ -30,7 +30,17 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.ResourceBundle;
+/**
+ * class reportsController.java
+ */
 
+/**
+ * @author Justin Simons
+ * */
+
+/**
+ * reportsController class shows the reports
+ * */
 public class reportsController implements Initializable {
 
     @FXML
@@ -116,6 +126,11 @@ public class reportsController implements Initializable {
 
     ObservableList<String> allContacts = FXCollections.observableArrayList();
 
+    /**
+     * initialize calls SetApptReportData(),SetCustomerReportDate(), and FillContactBox();
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         SetApptReportData();
@@ -128,6 +143,10 @@ public class reportsController implements Initializable {
         SetDateTimeFormats();
     }
 
+    /**
+     * SetDateTimeFormats sets the LocalDateTime format.
+     * first creates the DateTimeFormatter. then sets it to the CellVallueFactory and CellFactory for End and Start.
+     **/
     private void SetDateTimeFormats(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
 
@@ -158,6 +177,12 @@ public class reportsController implements Initializable {
         });
     }
 
+    /**
+     * SetApptReportData sets all the report data.
+     * first checks how many appointments are in each month
+     * then checks how many appointments for each type.
+     * then adds the number of months and types to each label.
+     */
     void SetApptReportData(){
         ObservableList<Appointments> allAppts = Tables.getAllAppointments();
         int jan = 0; int feb = 0; int mar = 0; int apr = 0; int may = 0; int june = 0; int july = 0; int aug = 0; int sep = 0; int oct = 0; int nov = 0; int dec = 0;
@@ -206,6 +231,12 @@ public class reportsController implements Initializable {
 
     }
 
+    /**
+     * FillContactBox fills the contact box with all contacts.
+     * first gets a connection to the Data Base.
+     * then adds each contact to choose contact combo box.
+     * @throws SQLException thrown if it can't make a connecting to the data base.
+     */
     void FillContactBox() throws SQLException {
         Connection connect = JDBC.getConnection();
         DBQuery.setStatement(connect);
@@ -224,6 +255,15 @@ public class reportsController implements Initializable {
         }
     }
 
+    /**
+     * SetCustomerReportDate sets the labels to show how many customers are from each country
+     * first gets all customers from the tables class.
+     * then makes a connection to the database
+     * then goes through every first level division in the database and compares the division id to the one associated with each customer.
+     * if the customer matches the division ID, then it gets the country ID from the division and increases that country by one.
+     * once all customers have been called, it will have the data to show how many customers are from the US, UK, and Canada
+     * @throws SQLException thrown if can't make a connection to the database
+     */
     void SetCustomerReportDate() throws SQLException {
         ObservableList<Customers> allCustomers = Tables.getAllCustomers();
         Connection connect = JDBC.getConnection();
@@ -261,6 +301,14 @@ public class reportsController implements Initializable {
         reportsTotalCustomersCanada.setText(String.valueOf(canada));
     }
 
+    /**
+     * reportScheduleChooseContactChosen takes the chosen contact and shows that contacts appointments
+     * first gets the selected contact name
+     * gets all appointments from tables class
+     * it then goes through every appointment and adds only the appointments associated with the chosen contact
+     * and adds it to the table. then refreshes the table
+     * @param event called when a contact is chosen from the combo box
+     */
     @FXML
     void reportScheduleChooseContactChosen(ActionEvent event) {
         String selectedContactName = reportScheduleChooseContact.getValue();
@@ -283,7 +331,11 @@ public class reportsController implements Initializable {
 
     Stage stage;
     Parent scene;
-
+    /**
+     * reportApptReturnButton returns to main page
+     * @param event called when return to main page button is clicked.
+     * @throws IOException is thrown if no scene is found.
+     */
     @FXML
     void reportApptReturnButton(ActionEvent event) throws IOException {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
@@ -291,7 +343,11 @@ public class reportsController implements Initializable {
         stage.setScene(new Scene(scene,1235,558));
         stage.show();
     }
-
+    /**
+     * reportCustomersReturnButton returns to main page
+     * @param event called when return to main page button is clicked.
+     * @throws IOException is thrown if no scene is found.
+     */
     @FXML
     void reportCustomersReturnButton(ActionEvent event) throws IOException {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
@@ -299,7 +355,11 @@ public class reportsController implements Initializable {
         stage.setScene(new Scene(scene,1235,558));
         stage.show();
     }
-
+    /**
+     * reportScheduleReturnButton returns to main page
+     * @param event called when return to main page button is clicked.
+     * @throws IOException is thrown if no scene is found.
+     */
     @FXML
     void reportScheduleReturnButton(ActionEvent event) throws IOException {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
@@ -307,7 +367,10 @@ public class reportsController implements Initializable {
         stage.setScene(new Scene(scene,1235,558));
         stage.show();
     }
-
+    /**
+     * myAlert shows an alert.
+     * @param alert gets the string that will be presented in the alert
+     */
     public void myAlert(String alert){
         Alert a = new Alert(Alert.AlertType.ERROR);
         a.setContentText(alert);

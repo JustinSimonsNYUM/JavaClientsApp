@@ -24,7 +24,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Customers;
 import model.Tables;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -32,7 +31,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.Objects;

@@ -15,7 +15,13 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Appointments;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -68,13 +74,17 @@ public class logInController {
      * it first gets the text entered for the userID and password.
      * it checks to make sure that both userID and password are "test"
      * if it is then it opens up the main page. and also checks for upcoming appointments in the next 15 minutes.
-     * @param event is called when the log in button is clicked.
-     * @throws IOException thrown if can't load the scene.f
+     * then writes to login_activity.txt all login attempts including the dates, timestamps and if the login attempt was successful or not.
+     * @param event is called when the login button is clicked.
+     * @throws IOException thrown if it can't load the scene.
      */
     @FXML
     void logInButton(ActionEvent event) throws IOException{
         String userId = userIdLogIn.getText();
         String password = passwordLogIn.getText();
+        LocalDate date = LocalDate.now();
+        LocalTime time = LocalTime.now();
+        boolean successfulLogin = false;
 
         ResourceBundle rb = ResourceBundle.getBundle("RB", Locale.getDefault());
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -87,6 +97,7 @@ public class logInController {
             stage.setScene(new Scene(scene,1235,558));
             stage.show();
             Appointments.checkUpcomingAppt();
+            successfulLogin = true;
         }
         else if(userId.isEmpty() || password.isEmpty()){
             alert.setContentText((String) rb.getObject("alertEmpty"));
@@ -95,6 +106,23 @@ public class logInController {
         else {
             alert.setContentText((String) rb.getObject("alertWrong"));
             alert.show();
+        }
+
+        try {
+            FileWriter fw = new FileWriter("C:/Users/Justin Simons/Documents/College/C195 JAVA app software II/login_activity.txt",true);
+            PrintWriter myPrintWriter = new PrintWriter(fw);
+            String loginString = "";
+            if(successfulLogin)
+                loginString = "successful.";
+            else
+                loginString = "not successful";
+            myPrintWriter.printf("The login attempt on %s at %s was %s\n",date.toString(),time.toString(),loginString);
+
+            myPrintWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("login_activity.txt file not found");
+            e.printStackTrace();
         }
     }
 

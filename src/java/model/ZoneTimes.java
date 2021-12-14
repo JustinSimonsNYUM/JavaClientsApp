@@ -5,20 +5,44 @@ import javafx.collections.ObservableList;
 
 
 import java.time.*;
+/**
+ * class ZoneTimes.java
+ */
 
+/**
+ * @author Justin Simons
+ * */
+
+/**
+ *  ZoneTimes class handles all appointment data
+ **/
 public class ZoneTimes {
 
     private static ObservableList<LocalDateTime> localdateStartTimes = FXCollections.observableArrayList();
     private static ObservableList<LocalDateTime> localdateEndTimes = FXCollections.observableArrayList();
 
+    /**
+     * getLocalDateStartTimes gets the localDateStartTimes
+     * @return localdateStartTimes
+     */
     public static ObservableList<LocalDateTime> getLocalDateStartTimes(){
         return localdateStartTimes;
     }
-
+    /**
+     * getLocalDateEndTimes gets the localdateEndTimes
+     * @return localdateEndTimes
+     */
     public static ObservableList<LocalDateTime> getLocalDateEndTimes(){
         return localdateEndTimes;
     }
 
+    /**
+     * setLocalStartTimes sets the local start times
+     * first starts with a local time in 8:00 am EST.
+     * it then goes through a for loop to change all times from 8:00 am to 9:45 pm EST to the localZoneID of those times.
+     * finishes with a list of times from 8:00 am to 9:45 pm EST to the local time zone.
+     * @return localStartTimes
+     */
     public static ObservableList<LocalTime> setLocalStartTimes(){
         ObservableList<LocalTime> localStartTimes = FXCollections.observableArrayList();
 
@@ -43,7 +67,13 @@ public class ZoneTimes {
         }
             return localStartTimes;
     }
-
+    /**
+     * setLocalEndTimes sets the local end times
+     * first starts with a local time in 8:15 am EST.
+     * it then goes through a for loop to change all times from 8:15 am to 10:00 pm EST to the localZoneID of those times.
+     * finishes with a list of times from 8:15 am to 10:00 pm EST to the local time zone.
+     * @return localEndfTimes
+     */
     public static ObservableList<LocalTime> setLocalEndTimes() {
         ObservableList<LocalTime> localEndTimes = FXCollections.observableArrayList();
         LocalTime localTime;
