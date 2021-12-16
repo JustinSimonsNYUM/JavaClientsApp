@@ -39,6 +39,7 @@ public class DBQuery {
     /**
      * setPreparedStatement sets creates a new prepared statement
      * @param connect holds the connection to the database
+     * @param sqlQuery gets the query and sets it to the prepared statement
      * @throws SQLException is thrown in a connection to the database is not made.
      */
     public static void setPreparedStatement(Connection connect, String sqlQuery) throws SQLException{

@@ -188,6 +188,7 @@ public class editCustomerController implements Initializable {
      * if not, it then connects to the database.
      * it then adds only the divisions associated with the chosen country.
      * @param mouseEvent called when the start time combo box is clicked
+     * @throws SQLException is thrown if no connection is made.
      */
     public void editCustomerDivisionClicked(MouseEvent mouseEvent) throws SQLException {
         String selectedCountry = editCustomerCountry.getValue();

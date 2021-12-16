@@ -491,6 +491,7 @@ public class mainPageController implements Initializable {
     }
     /**
      * myAlert shows an alert.
+     * @param alertType sets the alertType
      * @param alert gets the string that will be presented in the alert
      */
     public void myAlert(Alert.AlertType alertType, String alert){

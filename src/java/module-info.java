@@ -1,3 +1,6 @@
+/**
+ * module com.example.javaclientsapp establishes the apps modules.
+ */
 module com.example.javaclientsapp {
     requires javafx.controls;
     requires javafx.fxml;
@@ -17,15 +20,3 @@ module com.example.javaclientsapp {
     exports controller;
 
 }
-/*
-module sample {
-    requires javafx.controls;
-    requires javafx.fxml;
-
-    opens sample to javafx.fxml;
-    opens sample.model to javafx.fxml;
-
-    exports sample;
-    exports sample.model;
-}
- */

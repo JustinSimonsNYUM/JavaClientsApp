@@ -24,10 +24,22 @@ public class Appointments {
     private String description;
     private String location;
     private String type;
+    /**
+     * start holds the localDateTime start date and time of the appointment
+     */
     private final ObjectProperty<LocalDateTime> start = new SimpleObjectProperty<>();
+    /**
+     * end holds the localDateTime end date and time of the appointment
+     */
     private final ObjectProperty<LocalDateTime> end = new SimpleObjectProperty<>();
+    /**
+     * createDate holds the localDateTime createDate date and time of the appointment
+     */
     private final ObjectProperty<LocalDateTime> createDate = new SimpleObjectProperty<>();
     private String createdBy;
+    /**
+     * lastUpdate holds the localDateTime lastUpdate date and time of the appointment
+     */
     private final ObjectProperty<LocalDateTime> lastUpdate = new SimpleObjectProperty<>();
     private String lastUpdatedBy;
     private int customerID;
@@ -299,6 +311,7 @@ public class Appointments {
     }
     /**
      * myAlert shows an alert.
+     * @param alertType gets the alert type
      * @param alert gets the string that will be presented in the alert
      */
     public static void myAlert(Alert.AlertType alertType, String alert){

@@ -163,7 +163,7 @@
                     <Insets bottom="10.0" top="-1.0"/>
                 </VBox.margin>
             </ComboBox>
-            <DatePicker fx:id="editApptDate" prefHeight="25.0" prefWidth="181.0">
+            <DatePicker fx:id="editApptDate" editable="false" prefHeight="25.0" prefWidth="181.0">
                 <VBox.margin>
                     <Insets bottom="13.0"/>
                 </VBox.margin>

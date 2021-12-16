@@ -93,6 +93,7 @@ public class ZoneTimes {
 
             localTime = localZonedDateTime.toLocalTime();
             localEndTimes.add(localTime);
+
             //add 15 minutes to time.
             ESTTimes = ESTTimes.plusMinutes(addMinutes);
         }

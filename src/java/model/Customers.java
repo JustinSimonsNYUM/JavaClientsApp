@@ -15,15 +15,20 @@ import java.time.LocalDateTime;
 /**
  * Customers class handles all customer data
  * */
-
 public class Customers {
     private int id;
     private String name;
     private String address;
     private String postalCode;
     private String phone;
+    /**
+     * createDate holds the localDateTime createDate date and time of the appointment
+     */
     private final ObjectProperty<LocalDateTime> createDate = new SimpleObjectProperty<>();
     private String createdBy;
+    /**
+     * lastUpdate holds the localDateTime lastUpdate date and time of the appointment
+     */
     private final ObjectProperty<LocalDateTime> lastUpdate = new SimpleObjectProperty<>();
     private String lastUpdatedBy;
     private int divisionID;

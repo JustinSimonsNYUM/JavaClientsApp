@@ -14,6 +14,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
+import java.util.ResourceBundle;
 /**
  * class Main.java
  */
@@ -45,12 +47,14 @@ public class Main extends Application {
     public void start(Stage stage) throws SQLException {
         fillTables();
         try{
-           FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));
-           Scene scene = new Scene(fxmlLoader.load(), 400, 200);//login
-           stage.setScene(scene);
-           stage.setResizable(false);
-           stage.setTitle("Java Client App");
-           stage.show();
+            ResourceBundle rb = ResourceBundle.getBundle("RB", Locale.getDefault());
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));//"mainPage.fxml"));//"login.fxml"));
+          // Scene scene = new Scene(fxmlLoader.load(), 400, 200);//login
+            Scene scene = new Scene(fxmlLoader.load(), 1235, 558);//main
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle(rb.getString("stageTitle"));
+            stage.show();
        }
        catch(Exception e){
            Alert a = new Alert(Alert.AlertType.ERROR);

@@ -128,8 +128,6 @@ public class reportsController implements Initializable {
 
     /**
      * initialize calls SetApptReportData(),SetCustomerReportDate(), and FillContactBox();
-     * @param url
-     * @param resourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){

@@ -7,6 +7,7 @@ package controller;
  * @author Justin Simons
  * */
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,8 +21,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -57,7 +58,7 @@ public class logInController {
      * sets the exit button, log in button, zone id, password label, and user name to english or french
      */
     @FXML
-    private void initialize(){
+    private void initialize() {
         ResourceBundle rb = ResourceBundle.getBundle("RB", Locale.getDefault());
         exitButton.setText(rb.getString("exitButton"));
         logInButton.setText(rb.getString("logInButton"));
@@ -65,6 +66,7 @@ public class logInController {
         passwordLabel.setText(rb.getString("passwordLabel"));
         userNameLabel.setText(rb.getString("userNameLabel"));
     }
+
 
     Stage stage;
     Parent scene;
@@ -83,18 +85,24 @@ public class logInController {
         String userId = userIdLogIn.getText();
         String password = passwordLogIn.getText();
         LocalDate date = LocalDate.now();
-        LocalTime time = LocalTime.now();
+        LocalTime time = LocalTime.now().truncatedTo(ChronoUnit.MINUTES);
+        LocalDateTime localDateTime = LocalDateTime.of(date,time);
+        ZonedDateTime localZDT = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
+        ZonedDateTime UTCZDT = ZonedDateTime.ofInstant(localZDT.toInstant(), ZoneId.of("UTC"));
+        LocalTime UTCTime = UTCZDT.toLocalTime();
+        LocalDate UTCDate = UTCZDT.toLocalDate();
         boolean successfulLogin = false;
 
-        ResourceBundle rb = ResourceBundle.getBundle("RB", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("RB",Locale.getDefault());
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle((String) rb.getObject("errorTitle"));
         alert.setHeaderText((String) rb.getObject("errorHeader"));
 
         if((userId.equals("test")) && (password.equals("test"))){
-            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclientsapp/mainPage.fxml")));
-            stage.setScene(new Scene(scene,1235,558));
+            stage.setScene(new Scene(scene, 1235, 558));
+            stage.setTitle("Java Client App");
             stage.show();
             Appointments.checkUpcomingAppt();
             successfulLogin = true;
@@ -109,17 +117,17 @@ public class logInController {
         }
 
         try {
-            FileWriter fw = new FileWriter("C:/Users/Justin Simons/Documents/College/C195 JAVA app software II/login_activity.txt",true);
+            FileWriter fw = new FileWriter("C:/Users/LabUser/IdeaProjects/JavaClientsApp/login_activity.txt",true);
             PrintWriter myPrintWriter = new PrintWriter(fw);
             String loginString = "";
             if(successfulLogin)
                 loginString = "successful.";
             else
                 loginString = "not successful";
-            myPrintWriter.printf("The login attempt on %s at %s was %s\n",date.toString(),time.toString(),loginString);
+            myPrintWriter.printf("The login attempt on %s at %s was %s\n",UTCDate.toString(),UTCTime.toString(),loginString);
 
             myPrintWriter.close();
-            System.out.println("Successfully wrote to the file.");
+            System.out.println("Successfully wrote to the login_activity.txt.");
         } catch (IOException e) {
             System.out.println("login_activity.txt file not found");
             e.printStackTrace();

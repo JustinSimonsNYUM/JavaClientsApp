@@ -202,6 +202,8 @@ public class addApptController implements Initializable {
         else
             selectedStartDateTime = LocalDateTime.of(LocalDate.now(),selectedStartTime);
 
+        if(localEndDateTimes.get(0).toLocalTime().minusMinutes(15).equals(selectedStartTime.plusHours(1)))
+            return;
         addNewApptEndTime.getItems().clear();
         boolean timesMatch = false;
         for(LocalDateTime time : localEndDateTimes){
@@ -287,11 +289,14 @@ public class addApptController implements Initializable {
         String lastUpdatedBy = "script";
 
         //set the startDateTimes and change to UTC
-        LocalDateTime localStartDateTime;
+        LocalDateTime localStartDateTime = LocalDateTime.of(date,startTime);
+        /*
         if(startTime.equals(LocalTime.MIDNIGHT) || startTime.isAfter(LocalTime.MIDNIGHT) && (startTime.isBefore(localEndTimes.get(localEndTimes.size()-1))))
             localStartDateTime = LocalDateTime.of(date.plusDays(1), startTime);
         else
             localStartDateTime = LocalDateTime.of(date,startTime);
+
+         */
 
         ZonedDateTime localStartZoned = ZonedDateTime.of(localStartDateTime, ZoneId.systemDefault());
         ZonedDateTime UTCStartZonedDateTime = ZonedDateTime.ofInstant(localStartZoned.toInstant(), ZoneId.of("UTC"));
@@ -299,20 +304,33 @@ public class addApptController implements Initializable {
 
         //set the endDateTimes and change to UTC
         LocalDateTime localEndDateTime;
-        if(endTime.equals(LocalTime.MIDNIGHT) || endTime.isAfter(LocalTime.MIDNIGHT) && (endTime.isBefore(localEndTimes.get(localEndTimes.size()-1).plusMinutes(15))))
+        if((endTime.equals(LocalTime.MIDNIGHT) || endTime.isAfter(LocalTime.MIDNIGHT) && (endTime.isBefore(localEndTimes.get(localEndTimes.size()-1).plusMinutes(15)))) && !(startTime.equals(LocalTime.MIDNIGHT) || startTime.isAfter(LocalTime.MIDNIGHT) && (startTime.isBefore(localEndTimes.get(localEndTimes.size()-1)))))
             localEndDateTime = LocalDateTime.of(date.plusDays(1), endTime);
         else
             localEndDateTime = LocalDateTime.of(date,endTime);
         ZonedDateTime localEndZoned = ZonedDateTime.of(localEndDateTime, ZoneId.systemDefault());
         ZonedDateTime UTCEndZonedDateTime = ZonedDateTime.ofInstant(localEndZoned.toInstant(), ZoneId.of("UTC"));
         LocalDateTime UTCEndDateTime =  UTCEndZonedDateTime.toLocalDateTime();
+
         //alert if times are not within the business hours
-        LocalDateTime startOfBH = LocalDateTime.of(date,localStartTimes.get(0).minusMinutes(5));
-        LocalDateTime endOfBH = LocalDateTime.of(date.plusDays(1),localStartTimes.get(localEndTimes.size() - 1).plusMinutes(15));
-        if(localStartDateTime.isBefore(startOfBH) || localEndDateTime.isAfter(endOfBH)){
+        LocalTime startOfBH = localStartTimes.get(0);
+        LocalTime endOfBH = localEndTimes.get(localEndTimes.size()-1);
+        boolean outOfBH = false;
+        if(localStartTimes.contains(LocalTime.MIDNIGHT)){
+            if((startTime.isBefore(startOfBH) && startTime.isAfter(endOfBH)) ||(endTime.isBefore(startOfBH) && endTime.isAfter(endOfBH)) ){
+                outOfBH = true;
+            }
+        }
+        else{
+            if(!(startTime.isAfter(startOfBH) && startTime.isBefore(endOfBH)) || !(endTime.isAfter(startOfBH) && endTime.isBefore(endOfBH)) )
+                outOfBH = true;
+        }
+
+        if(outOfBH){
             myAlert("The start or end time is not within the buisness hours of "+ localStartTimes.get(0) + " and " + localEndTimes.get(localEndTimes.size()-1));
             return;
         }
+
         //alert if the selected time overlaps a preexisting appointment
         ObservableList<Appointments> allAppts = Tables.getAllAppointments();
         boolean overLappedFound = false;
