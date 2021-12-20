@@ -62,7 +62,7 @@ public class logInController {
         ResourceBundle rb = ResourceBundle.getBundle("RB", Locale.getDefault());
         exitButton.setText(rb.getString("exitButton"));
         logInButton.setText(rb.getString("logInButton"));
-        logInZoneId.setText(rb.getString("logInZoneId"));
+        logInZoneId.setText(ZoneId.systemDefault().toString());
         passwordLabel.setText(rb.getString("passwordLabel"));
         userNameLabel.setText(rb.getString("userNameLabel"));
     }
@@ -104,7 +104,6 @@ public class logInController {
             stage.setScene(new Scene(scene, 1235, 558));
             stage.setTitle("Java Client App");
             stage.show();
-            Appointments.checkUpcomingAppt();
             successfulLogin = true;
         }
         else if(userId.isEmpty() || password.isEmpty()){
@@ -117,7 +116,7 @@ public class logInController {
         }
 
         try {
-            FileWriter fw = new FileWriter("C:/Users/LabUser/IdeaProjects/JavaClientsApp/login_activity.txt",true);
+            FileWriter fw = new FileWriter("login_activity.txt",true);
             PrintWriter myPrintWriter = new PrintWriter(fw);
             String loginString = "";
             if(successfulLogin)
@@ -128,6 +127,8 @@ public class logInController {
 
             myPrintWriter.close();
             System.out.println("Successfully wrote to the login_activity.txt.");
+            if(successfulLogin)
+                Appointments.checkUpcomingAppt();
         } catch (IOException e) {
             System.out.println("login_activity.txt file not found");
             e.printStackTrace();
@@ -136,7 +137,7 @@ public class logInController {
 
     /**
      * logInFormExitButton closes the program
-     * @param event called when exit button is called
+     * @param event called when the exit button is called
      */
     @FXML
     void logInFormExitButton(ActionEvent event) {

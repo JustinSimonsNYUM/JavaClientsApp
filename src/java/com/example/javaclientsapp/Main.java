@@ -48,9 +48,8 @@ public class Main extends Application {
         fillTables();
         try{
             ResourceBundle rb = ResourceBundle.getBundle("RB", Locale.getDefault());
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));//"mainPage.fxml"));//"login.fxml"));
-          // Scene scene = new Scene(fxmlLoader.load(), 400, 200);//login
-            Scene scene = new Scene(fxmlLoader.load(), 1235, 558);//main
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 400, 200);//login
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle(rb.getString("stageTitle"));
